@@ -1,4 +1,4 @@
-﻿import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ConditionCard, DoctorCard, TestCard, TimelineStep, MedicineCard } from "@/types/analysis";
 import {
   defaultConditions,
@@ -21,7 +21,7 @@ import { useTypedText } from "@/hooks/useTypedText";
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: "easeOut" },
+  transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
 };
 
 type Props = {
@@ -116,7 +116,7 @@ export function AnalysisWidgets({
             <span className="typing-caret" aria-hidden="true" />
           </p>
           <p className="mt-4 text-xs text-slate-400">
-            {answersCount} responses · {symptomLabel}
+            {answersCount} responses � {symptomLabel}
           </p>
         </motion.section>
       )}

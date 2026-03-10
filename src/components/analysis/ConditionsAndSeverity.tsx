@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import type { ConditionCard } from "@/types/analysis";
@@ -7,7 +7,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
-  transition: { duration: 0.6, ease: "easeOut" },
+  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
 type Props = {
@@ -45,7 +45,7 @@ export function ConditionsAndSeverity({
               <p className="mt-3 text-xs font-semibold text-[#2b7f74]">{card.recovery}</p>
               <button className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[#1f67f2]">
                 Learn more
-                <span aria-hidden="true">→</span>
+                <span aria-hidden="true">?</span>
               </button>
             </div>
           ))}

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import type { DoctorCard } from "@/types/analysis";
@@ -7,7 +7,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
-  transition: { duration: 0.6, ease: "easeOut" },
+  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
 type Props = {
@@ -45,7 +45,7 @@ export function SpecialistAndDoctors({ specialist, doctors }: Props) {
               <div>
                 <p className="text-sm font-semibold text-slate-900">{doc.name}</p>
                 <p className="text-xs text-slate-500">{doc.specialty}</p>
-                <p className="mt-2 text-xs font-semibold text-[#2b7f74]">⭐ {doc.rating}</p>
+                <p className="mt-2 text-xs font-semibold text-[#2b7f74]">? {doc.rating}</p>
               </div>
               <div className="text-xs text-slate-500">
                 <p>{doc.distance}</p>

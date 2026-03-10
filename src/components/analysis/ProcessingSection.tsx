@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
@@ -8,7 +8,7 @@ const fadeUp = {
   initial: { opacity: 0, y: 16 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
-  transition: { duration: 0.6, ease: "easeOut" },
+  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
 };
 
 type Props = {
@@ -116,7 +116,7 @@ export function ProcessingSection({
               </div>
             </div>
             <div className="rounded-xl bg-white px-3 py-2 text-xs text-slate-500">
-              User input: {userLabel} · {answersCount} responses captured
+              User input: {userLabel} � {answersCount} responses captured
             </div>
           </div>
 
