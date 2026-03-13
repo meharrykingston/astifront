@@ -1,0 +1,231 @@
+/* =========================================
+   Dashboard Styles (Mobile Optimized)
+   ========================================= */
+
+/* 1. Main Container */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* 2. Page Header */
+.dashboard-header {
+  display: flex;
+  flex-direction: column; /* Stack vertically on mobile */
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* On larger screens, align side-by-side */
+@media (min-width: 640px) {
+  .dashboard-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.dashboard-title {
+  font-size: 20px; /* Smaller on mobile */
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+  .dashboard-title {
+    font-size: 24px;
+  }
+}
+
+/* 3. Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 Column on mobile */
+  gap: 12px;
+}
+
+/* 2 Columns on Tablet/Desktop */
+@media (min-width: 640px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* 3 Columns on Large Screens */
+@media (min-width: 1280px) {
+  .metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* 4. Metric Card */
+.metric-card {
+  background-color: #ffffff;
+  padding: 16px; /* Slightly less padding on mobile */
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .metric-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+}
+
+.metric-content {
+  flex: 1;
+  min-width: 0; /* Allows text to truncate properly */
+}
+
+.metric-content h3 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0 0 6px 0;
+}
+
+.metric-content .value {
+  font-size: 22px; /* Smaller for mobile */
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.1;
+}
+
+@media (min-width: 640px) {
+  .metric-content .value {
+    font-size: 26px;
+  }
+}
+
+.metric-content .subtext {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  white-space: normal; /* Allow wrapping on mobile */
+  display: block;
+}
+
+/* Change Indicators */
+.metric-content .change {
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.change.positive {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.change.negative {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* 5. Icon Fixes */
+.metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-icon svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0;
+}
+
+/* 6. Section Container */
+.section-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  /* REMOVED overflow: hidden to allow inner scroll */
+}
+
+@media (min-width: 640px) {
+  .section-container {
+    border-radius: 12px;
+    padding: 24px;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* 7. Table Responsiveness */
+.overflow-x-auto {
+  overflow-x: auto; /* Allows horizontal scrolling */
+  width: 100%;
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch; 
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Force table to be wide enough to scroll */
+  min-width: 500px; 
+}
+
+th {
+  padding-bottom: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+td {
+  padding: 10px 8px;
+  font-size: 13px;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Right align numeric columns */
+th.text-right, td.text-right {
+  text-align: right;
+}
+
+/* Hide specific columns on very small screens if needed (optional) */
+@media (max-width: 400px) {
+  /* Example: Hide Impressions column on very small screens */
+  /* td:nth-child(3), th:nth-child(3) { display: none; } */
+}
