@@ -108,17 +108,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Menu size={20} />
             </button>
 
-            {/* Desktop Search Bar */}
-            <div className="relative w-full max-w-sm group hidden sm:block">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 flex items-center justify-center group-focus-within:text-indigo-500 transition-colors">
-                <Search size={16} strokeWidth={2.5} />
-              </div>
-              <input
-                type="text"
-                placeholder="Search metrics..."
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold transition-all outline-none focus:bg-white focus:ring-4 focus:ring-indigo-100 focus:border-indigo-300"
-              />
-            </div>
           </div>
 
           <div className="flex items-center space-x-3">
