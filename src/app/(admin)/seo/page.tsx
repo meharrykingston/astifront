@@ -1,170 +1,166 @@
 "use client";
 import React from 'react';
-import {
+import { 
+  BarChart3, 
+  FileText, 
+  AlertCircle, 
+  MousePointer2, 
   TrendingUp,
-  MousePointer2,
-  Eye,
-  Target,
-  CheckCircle,
-  Clock,
-  AlertTriangle,
-  ExternalLink,
-  ChevronRight,
-  Calendar,
-  ChevronDown,
-  AlertCircle
+  Search,
+  Globe,
+  ArrowUpRight,
+  ArrowDownRight,
+  RefreshCw,
+  CheckCircle2,
+  XCircle
 } from 'lucide-react';
 
 export default function SEODashboard() {
- 
-  const stats = [
-    { label: 'Total Impressions', value: '4.2M', growth: '+12.5%', icon: Eye, color: 'text-gray-900', bg: 'bg-gray-100' },
-    { label: 'Total Clicks', value: '89.2K', growth: '+8.2%', icon: MousePointer2, color: 'text-gray-900', bg: 'bg-gray-100' },
-    { label: 'Avg. Position', value: '14.2', growth: '-1.4', icon: Target, color: 'text-gray-900', bg: 'bg-gray-100' },
-    { label: 'Avg. CTR', value: '2.1%', growth: '+0.4%', icon: TrendingUp, color: 'text-gray-900', bg: 'bg-gray-100' },
-  ];
-
   
-  const indexingData = [
-    { status: 'Indexed', count: '420,000', color: 'bg-black', description: 'Pages live on Google' },
-    { status: 'Crawled - Not Indexed', count: '380,000', color: 'bg-gray-400', description: 'Google knows, but hasn\'t listed' },
-    { status: 'Discovered - Not Indexed', count: '200,000', color: 'bg-gray-200', description: 'Google found the links' },
+  const gscMetrics = [
+    { label: 'Total Clicks', value: '124.5K', change: '+12%', icon: MousePointer2, color: 'text-indigo-600' },
+    { label: 'Total Impressions', value: '3.2M', change: '+5%', icon: BarChart3, color: 'text-blue-600' },
+    { label: 'Avg. Position', value: '14.2', change: '-0.8', icon: Search, color: 'text-emerald-600' },
+    { label: 'Ranking Keywords', value: '8,420', change: '+210', icon: TrendingUp, color: 'text-violet-600' },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8 pb-10 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
-
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-black tracking-tight">SEO Performance</h1>
-          <p className="text-sm sm:text-base text-gray-500 font-medium italic">Real-time monitoring for 1M+ symptom pages.</p>
+    <div className="max-w-400 mx-auto space-y-6 pb-10 px-4">
+      
+      {/* 1. Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-6 mt-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Search Intelligence</h1>
+          <p className="text-sm text-gray-400 font-medium italic">Astikan Healthcare Analytics Engine</p>
         </div>
-
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-          <button className="flex items-center justify-between w-full md:w-60 h-14 bg-white border border-black px-3 rounded-2xl hover:bg-black hover:text-white transition-all shadow-sm group shrink-0">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="w-9 h-9 bg-gray-100 flex items-center justify-center shrink-0 border border-gray-200 overflow-hidden group-hover:bg-gray-800">
-                <Calendar size={18} className="text-gray-600 group-hover:text-white transition-colors shrink-0" />
-              </div>
-
-              <div className="flex flex-col items-start justify-center leading-none">
-                <span className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1 group-hover:text-gray-300">Range</span>
-                <span className="text-sm sm:text-sm font-bold text-black whitespace-nowrap truncate group-hover:text-white">Last 28 Days</span>
-              </div>
-            </div>
-
-            <div className="w-8 h-8 flex items-center justify-center shrink-0">
-              <ChevronDown size={14} className="text-gray-400 group-hover:text-white transition-colors shrink-0" />
-            </div>
-          </button>
-        </div>
+        <button className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white rounded-2xl text-xs font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 shrink-0 uppercase tracking-widest">
+          {/* ICON CAGE */}
+          <div className="w-4 h-4 flex items-center justify-center shrink-0">
+             <RefreshCw size={14} />
+          </div>
+          Sync GSC Data
+        </button>
       </div>
 
-      {/* Analytics Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm hover:border-black transition-all">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center shrink-0 border border-gray-200`}>
-                <stat.icon size={18} className="sm:w-5 sm:h-5" />
+      {/* 2. Top GSC Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {gscMetrics.map((stat) => (
+          <div key={stat.label} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              {/* ICON CAGE */}
+              <div className={`w-10 h-10 flex items-center justify-center bg-gray-50 ${stat.color} rounded-2xl shrink-0 border border-gray-50`}>
+                <stat.icon size={18} strokeWidth={2.5} className="shrink-0" />
               </div>
-              <span className={`text-[10px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg border ${stat.growth.startsWith('+') ? 'bg-black text-white border-black' : 'bg-white text-black border-black'}`}>
-                {stat.growth}
-              </span>
+              <div className={`flex items-center gap-1 text-[11px] font-black ${stat.change.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}`}>
+                {stat.change}
+                {/* ICON CAGE */}
+                <div className="w-3.5 h-3.5 flex items-center justify-center shrink-0">
+                   {stat.change.startsWith('+') ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                </div>
+              </div>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 font-medium truncate">{stat.label}</p>
-            <p className="text-xl sm:text-2xl font-bold text-black mt-0.5 sm:mt-1">{stat.value}</p>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
+            <p className="text-2xl font-black text-gray-900 mt-1">{stat.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Indexing Section */}
-      <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-black shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 gap-4">
-          <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-black text-white rounded-lg sm:rounded-xl flex items-center justify-center shrink-0">
-              <CheckCircle size={18} className="sm:w-5 sm:h-5" />
+      {/* 3. Status & Health (Enhanced Visibility Cards) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        {/* Active Pages */}
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm border-b-4 border-b-emerald-500">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+              <CheckCircle2 size={18} className="shrink-0" />
             </div>
-            <span>Indexing Coverage</span>
-          </h3>
-
-          <button className="inline-flex items-center self-start sm:self-center gap-2 px-3 py-2 bg-white text-black rounded-xl hover:bg-black hover:text-white transition-all border border-black shrink-0">
-            <div className="w-5 h-5 flex items-center justify-center shrink-0">
-              <AlertCircle size={16} strokeWidth={2.5} />
-            </div>
-            <span className="text-[10px] sm:text-xs font-black whitespace-nowrap tracking-wide sm:tracking-widest uppercase">
-              Sitemap Errors
-            </span>
-            <ExternalLink size={14} />
-          </button>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Active Pages</span>
+          </div>
+          <p className="text-4xl font-black text-gray-900 tracking-tighter leading-none">1,024,000</p>
+          <p className="text-[11px] font-bold text-emerald-600 mt-2">Live on Google</p>
         </div>
 
-        {/* Grayscale distribution bar */}
-        <div className="h-3 sm:h-3.5 w-full bg-gray-100 rounded-full flex overflow-hidden mb-6 sm:mb-8 border border-gray-200">
-          <div className="h-full bg-black w-[42%]" />
-          <div className="h-full bg-gray-400 w-[38%]" />
-          <div className="h-full bg-gray-200 w-[20%]" />
+        {/* Inactive Pages */}
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm border-b-4 border-b-slate-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center shrink-0 border border-slate-100">
+              <XCircle size={18} className="shrink-0" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Inactive Pages</span>
+          </div>
+          <p className="text-4xl font-black text-slate-400 tracking-tighter leading-none">216,000</p>
+          <p className="text-[11px] font-bold text-slate-400 mt-2 text-balance leading-tight">Crawled - Not Indexed</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8">
-          {indexingData.map((data) => (
-            <div key={data.status}>
-              <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
-                <div className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${data.color} border border-black/10`} />
-                <span className="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">{data.status}</span>
-              </div>
-              <p className="text-2xl sm:text-3xl font-black text-black leading-none mb-0.5 sm:mb-1">{data.count}</p>
-              <p className="text-xs sm:text-sm text-gray-500 font-medium">{data.description}</p>
+        {/* 404 Pages */}
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm border-b-4 border-b-rose-500">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0 border border-rose-100">
+              <AlertCircle size={18} className="shrink-0" />
             </div>
-          ))}
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Crawl Errors</span>
+          </div>
+          <p className="text-4xl font-black text-rose-600 tracking-tighter leading-none">2,840</p>
+          <p className="text-[11px] font-bold text-rose-500 mt-2">404 Pages Found</p>
         </div>
+
+        {/* Blogs */}
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm border-b-4 border-b-indigo-500">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100">
+              <FileText size={18} className="shrink-0" />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Medical Blogs</span>
+          </div>
+          <p className="text-4xl font-black text-gray-900 tracking-tighter leading-none">4,520</p>
+          <p className="text-[11px] font-bold text-indigo-600 mt-2">Published Articles</p>
+        </div>
+
       </div>
 
-      {/* Lower Dashboard Sections */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border-2 border-black shadow-sm overflow-hidden">
-          <div className="p-5 sm:p-6 border-b border-gray-200 bg-gray-50 flex items-center gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center shrink-0 text-white bg-black rounded-lg">
-              <AlertTriangle size={18} className="sm:w-5 sm:h-5" />
+      {/* 4. Footer Keywords Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+          <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-6 flex items-center gap-2">
+            <div className="w-4 h-4 flex items-center justify-center shrink-0">
+               <Globe size={14} />
             </div>
-            <h4 className="font-bold text-black text-sm sm:text-base">Critical Alerts</h4>
+            Device Distribution
+          </h3>
+          <div className="flex gap-4 h-4 rounded-full overflow-hidden bg-gray-50 border border-gray-100">
+            <div className="bg-indigo-600 w-[65%]" />
+            <div className="bg-indigo-300 w-[25%]" />
+            <div className="bg-gray-200 w-[10%]" />
           </div>
-          <div className="p-5 sm:p-6">
-            <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white border-l-4 border-black items-start shadow-sm">
-              <div className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-black shrink-0">
-                <Clock size={16} className="sm:w-4 sm:h-4" />
-              </div>
-              <div>
-                <p className="text-xs sm:text-sm font-bold text-black uppercase tracking-tight">404 Errors Spiked</p>
-                <p className="text-xs sm:text-sm text-gray-600 mt-0.5 sm:mt-1 font-medium">2.4k pages returned 404 in the last 24 hours.</p>
-              </div>
-            </div>
+          <div className="grid grid-cols-3 mt-6">
+            <div><p className="text-[10px] font-black text-gray-400 uppercase">Mobile</p><p className="text-lg font-bold">65%</p></div>
+            <div><p className="text-[10px] font-black text-gray-400 uppercase">Desktop</p><p className="text-lg font-bold">25%</p></div>
+            <div><p className="text-[10px] font-black text-gray-400 uppercase">Tablet</p><p className="text-lg font-bold">10%</p></div>
           </div>
         </div>
 
-        {/* pSEO Performance by Template */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-          <div className="p-5 sm:p-6 border-b border-gray-200 bg-gray-50 font-bold text-black flex items-center gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center shrink-0 text-black bg-gray-200 rounded-lg">
-              <TrendingUp size={18} className="sm:w-5 sm:h-5" />
+        <div className="bg-slate-950 text-white rounded-3xl p-8 shadow-xl">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Top Performing Keywords</h3>
+            <div className="w-4 h-4 flex items-center justify-center shrink-0 text-emerald-400">
+               <TrendingUp size={16} />
             </div>
-            <span className="text-sm sm:text-base">Top pSEO Templates</span>
           </div>
-          <div className="divide-y divide-gray-100 flex-1">
-            {['Symptom Guide', 'Condition Deep Dive', 'Doctor Discovery'].map((name) => (
-              <div key={name} className="p-4 sm:p-5 flex items-center justify-between hover:bg-black hover:text-white transition-all cursor-pointer group">
-                <span className="font-semibold text-gray-800 group-hover:text-white transition-colors text-sm sm:text-base truncate pr-2">{name}</span>
-                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                  <span className="text-[10px] sm:text-xs font-bold text-black bg-gray-100 group-hover:bg-white/20 group-hover:text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg border border-gray-200 transition-colors whitespace-nowrap">42.1k clicks</span>
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-gray-300 group-hover:text-white transition-all">
-                    <ChevronRight size={16} className="sm:w-4.5 sm:h-4.5" />
-                  </div>
-                </div>
+          <div className="space-y-4">
+            {[
+              { kw: 'Acute Migraine', pos: '#1' },
+              { kw: 'Health Remedies', pos: '#3' },
+              { kw: 'Astikan Health', pos: '#1' },
+            ].map((k, i) => (
+              <div key={i} className="flex items-center justify-between p-3.5 bg-white/5 rounded-2xl border border-white/5 group hover:bg-white/10 transition-colors">
+                <span className="text-sm font-bold truncate pr-4">{k.kw}</span>
+                <span className="text-[10px] font-black bg-indigo-600 px-2 py-1 rounded-lg shrink-0">{k.pos}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
+
     </div>
   );
 }
