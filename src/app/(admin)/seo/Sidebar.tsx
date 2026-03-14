@@ -1,10 +1,15 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import './sidebar.css';
 import {
   LayoutDashboard, FileText, AlertCircle, BookOpen, Link2, 
   KeyRound, Users, Image, Activity, MapPin, Settings, X
 } from 'lucide-react';
+
+const SEO_USER_NAME_KEY = 'seo_user_name';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -27,6 +32,26 @@ const menuItems = [
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const pathname = usePathname();
+  const [userName, setUserName] = useState('Admin User');
+
+  useEffect(() => {
+    const syncUserName = () => {
+      const saved = window.localStorage.getItem(SEO_USER_NAME_KEY)?.trim();
+      setUserName(saved || 'Admin User');
+    };
+
+    syncUserName();
+    window.addEventListener('storage', syncUserName);
+    window.addEventListener('seo-user-name-change', syncUserName);
+    return () => {
+      window.removeEventListener('storage', syncUserName);
+      window.removeEventListener('seo-user-name-change', syncUserName);
+    };
+  }, []);
+
+  const userInitial = userName.charAt(0).toUpperCase() || 'A';
+
   return (
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       {/* Logo Section */}
@@ -48,18 +73,37 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <nav className="nav-container">
         {menuItems.map((item) => {
           const Icon = item.icon;
+          const isActive =
+            pathname === item.path || pathname.startsWith(`${item.path}/`);
           return (
-            <Link href={item.path} key={item.path} className="nav-item" onClick={onClose}>
+            <Link
+              href={item.path}
+              key={item.path}
+              className={`nav-item ${isActive ? 'active' : ''}`}
+              onClick={onClose}
+            >
               <Icon className="nav-icon" />
               <span>{item.name}</span>
             </Link>
           );
         })}
       </nav>
+
+      {/* Bottom User Card */}
+      <div className="border-t border-slate-200 p-4">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 shrink-0 rounded-full bg-linear-to-br from-blue-500 to-violet-500 text-white grid place-items-center text-base font-semibold">
+            {userInitial}
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold text-slate-900">{userName}</p>
+            <p className="truncate text-sm text-slate-500">admin@example.com</p>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 };
 
 export default Sidebar;
-
 

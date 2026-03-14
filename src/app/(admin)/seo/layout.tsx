@@ -4,11 +4,28 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import { UserCircle2 } from 'lucide-react';
 
+const SEO_USER_NAME_KEY = 'seo_user_name';
+
 export default function SeoLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const hour = new Date().getHours();
   const greeting = hour < 16 ? 'Good Morning' : 'Good Evening';
-  const userName = 'John';
+  const [userName, setUserName] = useState('Admin User');
+
+  React.useEffect(() => {
+    const syncUserName = () => {
+      const saved = window.localStorage.getItem(SEO_USER_NAME_KEY)?.trim();
+      setUserName(saved || 'Admin User');
+    };
+
+    syncUserName();
+    window.addEventListener('storage', syncUserName);
+    window.addEventListener('seo-user-name-change', syncUserName);
+    return () => {
+      window.removeEventListener('storage', syncUserName);
+      window.removeEventListener('seo-user-name-change', syncUserName);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full max-w-full overflow-x-hidden bg-gray-50">
@@ -42,5 +59,4 @@ export default function SeoLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
 

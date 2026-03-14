@@ -11,6 +11,8 @@ import {
   User,
 } from "lucide-react";
 
+const SEO_USER_NAME_KEY = "seo_user_name";
+
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
     fullName: "John Doe",
@@ -26,6 +28,21 @@ export default function SettingsPage() {
     criticalOnly: false,
     twoFactor: false,
   });
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const savedName = window.localStorage.getItem(SEO_USER_NAME_KEY);
+    if (savedName?.trim()) {
+      setProfile((prev) => ({ ...prev, fullName: savedName.trim() }));
+    }
+  }, []);
+
+  const updateSharedUserName = (name: string) => {
+    if (typeof window === "undefined") return;
+    const nextName = name.trim();
+    window.localStorage.setItem(SEO_USER_NAME_KEY, nextName || "Admin User");
+    window.dispatchEvent(new Event("seo-user-name-change"));
+  };
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
@@ -51,7 +68,11 @@ export default function SettingsPage() {
                 Full name
                 <input
                   value={profile.fullName}
-                  onChange={(e) => setProfile((p) => ({ ...p, fullName: e.target.value }))}
+                  onChange={(e) => {
+                    const nextName = e.target.value;
+                    setProfile((p) => ({ ...p, fullName: nextName }));
+                    updateSharedUserName(nextName);
+                  }}
                   className="mt-1 h-8 w-full rounded-lg border border-slate-200 bg-slate-50 px-2 text-xs sm:text-sm"
                 />
               </label>
@@ -99,7 +120,10 @@ export default function SettingsPage() {
               </label>
             </div>
 
-            <button className="mt-3 inline-flex h-8 items-center gap-1 rounded-lg bg-blue-600 px-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700">
+            <button
+              onClick={() => updateSharedUserName(profile.fullName)}
+              className="mt-3 inline-flex h-8 items-center gap-1 rounded-lg bg-blue-600 px-2 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700"
+            >
               <Save className="h-3.5! w-3.5!" />
               Save Profile
             </button>
@@ -229,5 +253,4 @@ function ToggleRow({
     </div>
   );
 }
-
 
