@@ -1,231 +1,120 @@
-/* =========================================
-   Dashboard Styles (Mobile Optimized)
-   ========================================= */
+/* dashboard.css */
 
-/* 1. Main Container */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
+/* Tailwind v4 Import */
+@import "tailwindcss";
 
-/* 2. Page Header */
-.dashboard-header {
-  display: flex;
-  flex-direction: column; /* Stack vertically on mobile */
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
+@layer components {
+  /* --- 1. Main Layout & Container --- */
+  .dashboard-container {
+    /* overflow-x-hidden acts as a final guardrail against horizontal page scroll */
+    @apply flex flex-col gap-6 w-full max-w-7xl mx-auto px-4 py-6 sm:p-6 lg:p-8 overflow-x-hidden;
+  }
 
-/* On larger screens, align side-by-side */
-@media (min-width: 640px) {
+  /* --- 2. Header --- */
   .dashboard-header {
-    flex-direction: row;
-    align-items: center;
+    @apply flex flex-col sm:flex-row sm:items-center justify-between gap-4;
   }
-}
 
-.dashboard-title {
-  font-size: 20px; /* Smaller on mobile */
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
-  line-height: 1.2;
-}
-
-@media (min-width: 640px) {
   .dashboard-title {
-    font-size: 24px;
+    @apply text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight mb-1;
   }
-}
 
-/* 3. Metrics Grid */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: 1fr; /* 1 Column on mobile */
-  gap: 12px;
-}
+  .dashboard-subtitle {
+    @apply text-sm text-slate-500;
+  }
 
-/* 2 Columns on Tablet/Desktop */
-@media (min-width: 640px) {
+  .sync-btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm h-10 w-fit cursor-pointer;
+  }
+
+  /* --- 3. Metrics Grid (Intrinsic Design) --- */
   .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    @apply grid gap-4 sm:gap-6 w-full;
+    /* The Magic Line: Replaces all media queries for the grid */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   }
-}
 
-/* 3 Columns on Large Screens */
-@media (min-width: 1280px) {
-  .metrics-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-}
-
-/* 4. Metric Card */
-.metric-card {
-  background-color: #ffffff;
-  padding: 16px; /* Slightly less padding on mobile */
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-@media (min-width: 640px) {
+  /* --- 4. Metric Cards --- */
   .metric-card {
-    padding: 20px;
-    border-radius: 12px;
+    @apply bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between gap-4 min-w-0 transition-all duration-200 hover:-translate-y-1 hover:shadow-md;
   }
-}
 
-.metric-content {
-  flex: 1;
-  min-width: 0; /* Allows text to truncate properly */
-}
+  .metric-content {
+    /* min-w-0 ensures the flex child can shrink below its content size to allow truncation */
+    @apply flex-1 min-w-0 flex flex-col; 
+  }
 
-.metric-content h3 {
-  font-size: 12px;
-  font-weight: 500;
-  color: #64748b;
-  margin: 0 0 6px 0;
-}
+  .metric-content h3 {
+    @apply text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 truncate w-full;
+  }
 
-.metric-content .value {
-  font-size: 22px; /* Smaller for mobile */
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0;
-  line-height: 1.1;
-}
-
-@media (min-width: 640px) {
   .metric-content .value {
-    font-size: 26px;
+    @apply text-3xl font-bold text-slate-900 mb-1 leading-none;
   }
-}
 
-.metric-content .subtext {
-  font-size: 11px;
-  color: #94a3b8;
-  margin-top: 4px;
-  margin-bottom: 8px;
-  white-space: normal; /* Allow wrapping on mobile */
-  display: block;
-}
+  .metric-content .subtext {
+    @apply text-xs text-slate-400 mb-3 line-clamp-2; 
+  }
 
-/* Change Indicators */
-.metric-content .change {
-  font-size: 11px;
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 6px;
-  border-radius: 9999px;
-  font-weight: 500;
-}
+  .change {
+    @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md w-fit;
+  }
 
-.change.positive {
-  background-color: #dcfce7;
-  color: #16a34a;
-}
+  .change.positive {
+    @apply bg-green-100 text-green-700;
+  }
 
-.change.negative {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
+  .change.negative {
+    @apply bg-red-100 text-red-700;
+  }
 
-/* 5. Icon Fixes */
-.metric-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
+  .metric-icon {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center shrink-0;
+  }
 
-.metric-icon svg {
-  width: 18px !important;
-  height: 18px !important;
-  flex-shrink: 0;
-}
-
-/* 6. Section Container */
-.section-container {
-  background-color: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  padding: 16px;
-  /* REMOVED overflow: hidden to allow inner scroll */
-}
-
-@media (min-width: 640px) {
+  /* --- 5. Table Section --- */
   .section-container {
-    border-radius: 12px;
-    padding: 24px;
+    /* min-w-0 and overflow-hidden prevent the table from blowing out the mobile viewport */
+    @apply bg-white rounded-xl border border-slate-200 p-5 sm:p-6 w-full shadow-sm min-w-0 overflow-hidden;
   }
-}
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f1f5f9;
-}
+  .section-header {
+    @apply flex justify-between items-center mb-5 pb-4 border-b border-slate-100;
+  }
 
-.section-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0;
-}
+  .section-title {
+    @apply text-lg font-semibold text-slate-900;
+  }
 
-/* 7. Table Responsiveness */
-.overflow-x-auto {
-  overflow-x: auto; /* Allows horizontal scrolling */
-  width: 100%;
-  /* Smooth scrolling on iOS */
-  -webkit-overflow-scrolling: touch; 
-}
+  .view-all-link {
+    @apply hidden sm:inline-flex items-center gap-1 text-sm text-blue-600 font-medium hover:underline;
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  /* Force table to be wide enough to scroll */
-  min-width: 500px; 
-}
+  /* Scrollable Table Wrapper */
+  .table-wrapper {
+    /* This allows ONLY the table to scroll horizontally, leaving the page intact */
+    @apply w-full overflow-x-auto pb-2;
+    -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
+  }
 
-th {
-  padding-bottom: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  text-align: left;
-}
+  .data-table {
+    /* min-w-[600px] ensures columns don't squish into unreadable vertical text */
+    @apply w-full min-w-150 text-left border-collapse;
+  }
 
-td {
-  padding: 10px 8px;
-  font-size: 13px;
-  color: #334155;
-  border-bottom: 1px solid #f1f5f9;
-}
+  .data-table th {
+    @apply pb-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b-2 border-slate-100;
+  }
 
-/* Right align numeric columns */
-th.text-right, td.text-right {
-  text-align: right;
-}
+  .data-table td {
+    @apply py-4 text-sm text-slate-700 border-b border-slate-50;
+  }
 
-/* Hide specific columns on very small screens if needed (optional) */
-@media (max-width: 400px) {
-  /* Example: Hide Impressions column on very small screens */
-  /* td:nth-child(3), th:nth-child(3) { display: none; } */
+  .data-table tr:last-child td {
+    @apply border-0;
+  }
+
+  .data-table tr:hover td {
+    @apply bg-slate-50 transition-colors;
+  }
 }
