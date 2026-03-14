@@ -1,124 +1,149 @@
 "use client";
 
-import React, { useState } from 'react';
-import { UploadCloud, X, FileText, CheckCircle2, Loader2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  ArrowLeft,
+  CheckCircle2,
+  FileJson,
+  FileSpreadsheet,
+  FileText,
+  Loader2,
+  Sparkles,
+  UploadCloud,
+} from 'lucide-react';
 
 interface UploadDropzoneProps {
   onBack: () => void;
 }
 
-const UploadDropzone: React.FC<UploadDropzoneProps> = ({ onBack }) => {
+export default function UploadDropzone({ onBack }: UploadDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success'>('idle');
+  const [progress, setProgress] = useState(0);
 
-  // Logic to handle drag states
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => setIsDragging(false);
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    // Future: Logic to parse files goes here
-    simulateUpload();
-  };
+  const statusText = useMemo(() => {
+    if (uploadStatus === 'uploading') return `Uploading ${progress}%`;
+    if (uploadStatus === 'success') return 'Upload complete';
+    return 'Drop files here or click to upload';
+  }, [uploadStatus, progress]);
 
   const simulateUpload = () => {
     setUploadStatus('uploading');
-    setTimeout(() => setUploadStatus('success'), 2000);
+    setProgress(0);
+    let p = 0;
+    const timer = setInterval(() => {
+      p += 10;
+      setProgress(p);
+      if (p >= 100) {
+        clearInterval(timer);
+        setUploadStatus('success');
+      }
+    }, 120);
+  };
+
+  const onDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    simulateUpload();
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm w-full flex-1 flex flex-col p-4 sm:p-8 relative min-h-100">
-      {/* Close Button */}
-      <button 
-        onClick={onBack}
-        className="absolute top-4 right-4 p-2 text-slate-400 hover:bg-slate-100 rounded-md transition-colors z-10"
-      >
-        <X className="w-5! h-5! shrink-0" />
-      </button>
-
-      <div className="flex flex-col items-center justify-center h-full max-w-2xl mx-auto w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-xl font-bold text-slate-900">Bulk Page Upload</h2>
-          <p className="text-sm text-slate-500 mt-1">Upload CSV, HTML, or JSON schemas to generate pages in bulk.</p>
+    <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] sm:p-5 lg:p-6">
+      <div className="mx-auto w-full max-w-275 space-y-4">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="inline-flex h-8 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-100"
+          >
+            <ArrowLeft className="h-3.5! w-3.5!" />
+            Back to pages
+          </button>
         </div>
 
-        {/* --- DYNAMIC UPLOAD AREA --- */}
-        <div 
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`
-            w-full aspect-video sm:aspect-21/9 rounded-2xl border-2 border-dashed transition-all duration-200 flex flex-col items-center justify-center p-6 text-center cursor-pointer
-            ${isDragging ? 'border-blue-500 bg-blue-50 scale-[1.01]' : 'border-slate-300 bg-slate-50 hover:bg-slate-100'}
-            ${uploadStatus === 'success' ? 'border-green-500 bg-green-50' : ''}
-          `}
-        >
-          {uploadStatus === 'idle' && (
-            <>
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-4">
-                <UploadCloud className="w-6! h-6! sm:w-8! sm:h-8! shrink-0" />
-              </div>
-              <h3 className="text-base font-semibold text-slate-900">
-                Drag & drop files here
-              </h3>
-              <p className="text-xs text-slate-500 mt-1 mb-4 px-4">
-                Or click to browse from your computer (Max 50MB per file)
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                <span className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600 uppercase tracking-wider">CSV</span>
-                <span className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600 uppercase tracking-wider">JSON</span>
-                <span className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600 uppercase tracking-wider">HTML</span>
-              </div>
-            </>
-          )}
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">Bulk Page Upload</h2>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600">
+              Import pages from CSV, JSON, or HTML. We auto-validate fields before publishing.
+            </p>
+          </div>
 
-          {uploadStatus === 'uploading' && (
-            <div className="flex flex-col items-center animate-pulse">
-              <Loader2 className="w-10! h-10! text-blue-600 animate-spin mb-4 shrink-0" />
-              <p className="text-sm font-medium text-slate-700">Processing bulk data...</p>
+          <label
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={onDrop}
+            className={`block cursor-pointer rounded-2xl border border-dashed p-6 text-center transition sm:p-10 ${
+              isDragging
+                ? 'border-blue-400 bg-blue-50'
+                : uploadStatus === 'success'
+                  ? 'border-emerald-300 bg-emerald-50'
+                  : 'border-slate-300 bg-slate-50 hover:border-slate-400 hover:bg-slate-100'
+            }`}
+          >
+            <input type="file" multiple className="hidden" onChange={simulateUpload} />
+            <div className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-xl bg-white text-slate-600 shadow-sm">
+              {uploadStatus === 'uploading' ? (
+                <Loader2 className="h-4! w-4! animate-spin" />
+              ) : uploadStatus === 'success' ? (
+                <CheckCircle2 className="h-4! w-4! text-emerald-600" />
+              ) : (
+                <UploadCloud className="h-4! w-4!" />
+              )}
             </div>
-          )}
 
-          {uploadStatus === 'success' && (
-            <div className="flex flex-col items-center text-green-600">
-              <CheckCircle2 className="w-12! h-12! mb-4 shrink-0" />
-              <h3 className="text-base font-bold">Upload Complete!</h3>
-              <p className="text-sm opacity-80 mb-6 text-center">Your pages are being processed and will appear in the list soon.</p>
-              <button 
-                onClick={() => setUploadStatus('idle')}
-                className="text-xs font-semibold underline underline-offset-4"
-              >
-                Upload more files
-              </button>
+            <p className="text-sm lg:text-base font-semibold text-slate-900">{statusText}</p>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600">Max file size: 50MB each</p>
+
+            {uploadStatus === 'uploading' && (
+              <div className="mx-auto mt-4 h-2 w-full max-w-md overflow-hidden rounded-full bg-slate-200">
+                <div
+                  className="h-full rounded-full bg-blue-600 transition-all"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            )}
+          </label>
+
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-slate-200 p-3">
+              <div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                <FileSpreadsheet className="h-3.5! w-3.5!" />
+              </div>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900">CSV</p>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600">Best for bulk SEO metadata upload</p>
             </div>
-          )}
-        </div>
-
-        {/* Bulk Guidelines */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-          <div className="flex items-start gap-3 p-3 bg-slate-100/50 rounded-lg border border-slate-100">
-            <FileText className="w-4! h-4! text-slate-400 mt-0.5 shrink-0" />
-            <div>
-              <p className="text-[11px] font-bold text-slate-700 uppercase">Schema Format</p>
-              <p className="text-[11px] text-slate-500 leading-relaxed">Ensure your JSON follows our medical data schema structure.</p>
+            <div className="rounded-xl border border-slate-200 p-3">
+              <div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                <FileJson className="h-3.5! w-3.5!" />
+              </div>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900">JSON</p>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600">Structured content import format</p>
+            </div>
+            <div className="rounded-xl border border-slate-200 p-3">
+              <div className="mb-1 inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                <FileText className="h-3.5! w-3.5!" />
+              </div>
+              <p className="text-xs sm:text-sm font-semibold text-slate-900">HTML</p>
+              <p className="mt-1 text-xs sm:text-sm text-slate-600">Import static pages with parsing</p>
             </div>
           </div>
-          <div className="flex items-start gap-3 p-3 bg-slate-100/50 rounded-lg border border-slate-100">
-            <UploadCloud className="w-4! h-4! text-slate-400 mt-0.5 shrink-0" />
-            <div>
-              <p className="text-[11px] font-bold text-slate-700 uppercase">Rate Limits</p>
-              <p className="text-[11px] text-slate-500 leading-relaxed">Bulk uploads are limited to 10,000 entries per batch.</p>
-            </div>
+
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <p className="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-slate-900">
+              <Sparkles className="h-3.5! w-3.5!" />
+              Tips before upload
+            </p>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600">
+              Include fields: title, slug, meta_title, meta_description, canonical_url, publish_status.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
+}
 
-export default UploadDropzone;
+

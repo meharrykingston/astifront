@@ -3,7 +3,7 @@ import Link from 'next/link';
 import './sidebar.css';
 import {
   LayoutDashboard, FileText, AlertCircle, BookOpen, Link2, 
-  KeyRound, Users, Image, Activity, MapPin, X
+  KeyRound, Users, Image, Activity, MapPin, Settings, X
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -23,6 +23,7 @@ const menuItems = [
   { name: 'Assets', path: '/seo/assets', icon: Image },
   { name: 'Search Signals', path: '/seo/signals', icon: Activity },
   { name: 'Google Business', path: '/seo/google-business', icon: MapPin },
+  { name: 'Settings', path: '/seo/settings', icon: Settings },
 ];
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
@@ -60,3 +61,5 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 };
 
 export default Sidebar;
+
+
