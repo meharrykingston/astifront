@@ -106,8 +106,8 @@ function BlogEditor({
   const [draft, setDraft] = useState<BlogPost>(post);
 
   return (
-    <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-275 space-y-4">
+    <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-2 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
+      <div className="mx-auto w-full max-w-[1100px] space-y-4">
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={onBack}
@@ -200,7 +200,7 @@ function BlogEditor({
 function BlogPreview({ post, onBack }: { post: BlogPost; onBack: () => void }) {
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-225ce-y-4">
+      <div className="mx-auto w-full max-w-[900px] space-y-4">
         <button
           onClick={onBack}
           className="inline-flex h-8 items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
@@ -248,7 +248,7 @@ function BlogImport({ onBack, onImport }: { onBack: () => void; onImport: (items
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-225 space-y-4">
+      <div className="mx-auto w-full max-w-[900px] space-y-4">
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
@@ -358,7 +358,7 @@ export default function BlogPage() {
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-375 space-y-4">
+      <div className="mx-auto w-full max-w-[1500px] min-w-0 space-y-4 px-1 sm:px-0">
         <header className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">Blog Management</h1>
@@ -442,20 +442,34 @@ export default function BlogPage() {
           <div className="divide-y divide-slate-100">
             {filteredPosts.length === 0 && <p className="p-4 text-xs sm:text-sm text-slate-500">No blog posts found for current filters.</p>}
             {filteredPosts.map((post) => (
-              <div key={post.id} className="px-3 py-3 md:px-4 md:py-0">
+              <div key={post.id} className="px-3 py-3 sm:px-4 md:px-4 md:py-0">
                 <div className="grid gap-2 md:hidden">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2"><FileText className="h-3.5! w-3.5! text-slate-400" /><p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{post.title}</p></div>
-                      <p className="mt-1 truncate font-mono text-xs sm:text-sm text-slate-500">{post.slug}</p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-3.5! w-3.5! text-slate-400" />
+                      <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{post.title}</p>
                     </div>
-                    <span className={`rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClass[post.status]}`}>{post.status}</span>
+                    <p className="mt-1 truncate font-mono text-xs sm:text-sm text-slate-500">{post.slug}</p>
+                    <div className="mt-1 flex items-center justify-between gap-2">
+                      <span className={`rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClass[post.status]}`}>{post.status}</span>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => { setActivePost(post); setMode("preview"); }} className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100" aria-label="View">
+                          <Eye className="h-3.5! w-3.5!" />
+                        </button>
+                        <button onClick={() => { setActivePost(post); setMode("editor"); }} className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-100" aria-label="Edit">
+                          <PenSquare className="h-3.5! w-3.5!" />
+                        </button>
+                        <button onClick={() => setPosts((prev) => prev.filter((x) => x.id !== post.id))} className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-red-200 text-red-600 hover:bg-red-50" aria-label="Delete">
+                          <Trash2 className="h-3.5! w-3.5!" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-1 text-xs sm:text-sm text-slate-600"><span>Category: {post.category}</span><span>Views: {post.views.toLocaleString()}</span><span>SEO Score: {post.seoScore}</span><span>Date: {post.updatedAt}</span></div>
-                  <div className="mt-1 flex items-center justify-end gap-1">
-                    <button onClick={() => { setActivePost(post); setMode("preview"); }} className="inline-flex h-7 items-center gap-1 rounded-lg border border-slate-200 px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"><Eye className="h-3.5! w-3.5!" />View</button>
-                    <button onClick={() => { setActivePost(post); setMode("editor"); }} className="inline-flex h-7 items-center gap-1 rounded-lg border border-slate-200 px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"><PenSquare className="h-3.5! w-3.5!" />Edit</button>
-                    <button onClick={() => setPosts((prev) => prev.filter((x) => x.id !== post.id))} className="inline-flex h-7 items-center gap-1 rounded-lg border border-red-200 px-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50"><Trash2 className="h-3.5! w-3.5!" />Delete</button>
+                  <div className="grid grid-cols-2 gap-1 text-xs sm:text-sm text-slate-600">
+                    <span>Category: {post.category}</span>
+                    <span>Views: {post.views.toLocaleString()}</span>
+                    <span>SEO Score: {post.seoScore}</span>
+                    <span>Date: {post.updatedAt}</span>
                   </div>
                 </div>
 
@@ -481,5 +495,3 @@ export default function BlogPage() {
     </section>
   );
 }
-
-
