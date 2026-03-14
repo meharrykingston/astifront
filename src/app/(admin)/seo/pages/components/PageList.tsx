@@ -1,108 +1,120 @@
 "use client";
 
 import React from 'react';
-import { FileText, Edit, Trash2 } from 'lucide-react';
+import { FileText, MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import type { SeoPage } from '../page';
 
 interface PageListProps {
-  pages: any[];
-  onEdit: (page: any) => void;
+  pages: SeoPage[];
+  onEdit: (page: SeoPage) => void;
+  onDelete: (pageId: number) => void;
 }
 
-const PageList: React.FC<PageListProps> = ({ pages, onEdit }) => {
+const statusClasses: Record<SeoPage['status'], string> = {
+  published: 'bg-emerald-100 text-emerald-700',
+  draft: 'bg-slate-200 text-slate-700',
+  scheduled: 'bg-amber-100 text-amber-700',
+};
+
+export default function PageList({ pages, onEdit, onDelete }: PageListProps) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm w-full overflow-hidden">
-      <div className="p-4 sm:p-5 border-b border-slate-100">
-        <h2 className="text-base font-semibold text-slate-900">All Pages</h2>
+    <section className="w-full overflow-hidden rounded-2xl border border-slate-200 bg-white font-['Sora'] shadow-sm">
+      <div className="hidden border-b border-slate-100 px-4 py-3 text-xs sm:text-sm font-semibold text-slate-500 md:grid md:grid-cols-[2.1fr_1.2fr_1.2fr_1.5fr_1fr_1.4fr_0.7fr] md:gap-3">
+        <span>Title</span>
+        <span>Slug</span>
+        <span>Status</span>
+        <span>Author</span>
+        <span className="text-right">Views</span>
+        <span>Last Modified</span>
+        <span className="text-right">Actions</span>
       </div>
 
-      <div className="w-full">
-        {/* --- MOBILE VIEW (Vertical Stacked Cards) --- */}
-        <div className="block md:hidden divide-y divide-slate-100">
-          {pages.map((page) => (
-            <div key={page.id} className="p-4 flex flex-col gap-3 hover:bg-slate-50 transition-colors">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                    <FileText className="w-4! h-4! shrink-0" />
+      <div className="divide-y divide-slate-100">
+        {pages.length === 0 && (
+          <div className="px-4 py-8 text-center text-xs sm:text-sm text-slate-500">No pages found for current filters.</div>
+        )}
+
+        {pages.map((page) => (
+          <div key={page.id} className="px-3 py-3 sm:px-4 md:px-4 md:py-0">
+            <div className="grid gap-2 md:hidden">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-3.5! w-3.5! text-slate-400" />
+                    <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{page.title}</p>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-[13px] font-semibold text-slate-900 truncate">{page.title}</p>
-                    <p className="text-[11px] text-slate-500 truncate">{page.path}</p>
-                  </div>
+                  <p className="mt-1 truncate font-mono text-xs sm:text-sm text-slate-500">{page.slug}</p>
                 </div>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
-                  page.status === 'Published' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'
-                }`}>
+                <span className={`inline-flex rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClasses[page.status]}`}>
                   {page.status}
                 </span>
               </div>
-              
-              <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-slate-100">
-                <button 
+
+              <div className="grid grid-cols-2 gap-1 text-xs sm:text-sm text-slate-600">
+                <span>Author: {page.author}</span>
+                <span>Views: {page.views.toLocaleString()}</span>
+                <span>Date: {page.lastModified}</span>
+              </div>
+
+              <div className="mt-1 flex items-center justify-end gap-1">
+                <button
                   onClick={() => onEdit(page)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-medium transition-colors"
+                  className="inline-flex h-7 items-center gap-1 rounded-lg border border-slate-200 px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
                 >
-                  <Edit className="w-3! h-3! shrink-0" /> Edit
+                  <Pencil className="h-3.5! w-3.5!" />
+                  Edit
                 </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded text-[11px] font-medium transition-colors">
-                  <Trash2 className="w-3! h-3! shrink-0" /> Delete
+                <button
+                  onClick={() => onDelete(page.id)}
+                  className="inline-flex h-7 items-center gap-1 rounded-lg border border-red-200 px-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="h-3.5! w-3.5!" />
+                  Delete
                 </button>
               </div>
             </div>
-          ))}
-        </div>
 
-        {/* --- DESKTOP VIEW (Professional Table) --- */}
-        <div className="hidden md:block overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-175">
-            <thead>
-              <tr className="bg-slate-50/50">
-                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100">Page Name</th>
-                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100">Path</th>
-                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100">Status</th>
-                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100">Last Modified</th>
-                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {pages.map((page) => (
-                <tr key={page.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="py-3 px-5">
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-4! h-4! text-slate-400 shrink-0" />
-                      <span className="text-[13px] font-medium text-slate-900">{page.title}</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-5 text-[13px] text-slate-500 font-mono">{page.path}</td>
-                  <td className="py-3 px-5">
-                    <span className={`inline-flex text-[11px] font-semibold px-2 py-0.5 rounded-full ${
-                      page.status === 'Published' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-700'
-                    }`}>
-                      {page.status}
-                    </span>
-                  </td>
-                  <td className="py-3 px-5 text-[13px] text-slate-500">{page.lastModified}</td>
-                  <td className="py-3 px-5 text-right">
-                    <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
-                        onClick={() => onEdit(page)}
-                        className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                      >
-                        <Edit className="w-4! h-4! shrink-0" />
-                      </button>
-                      <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
-                        <Trash2 className="w-4! h-4! shrink-0" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            <div className="hidden md:grid md:grid-cols-[2.1fr_1.2fr_1.2fr_1.5fr_1fr_1.4fr_0.7fr] md:items-center md:gap-3 md:px-0 md:py-3">
+              <div className="flex min-w-0 items-center gap-2">
+                <FileText className="h-3.5! w-3.5! shrink-0 text-slate-400" />
+                <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{page.title}</p>
+              </div>
+              <p className="truncate font-mono text-xs sm:text-sm text-slate-600">{page.slug}</p>
+              <span className={`inline-flex w-fit rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClasses[page.status]}`}>
+                {page.status}
+              </span>
+              <p className="truncate text-xs sm:text-sm text-slate-700">{page.author}</p>
+              <p className="text-right text-xs sm:text-sm text-slate-700">{page.views.toLocaleString()}</p>
+              <p className="text-xs sm:text-sm text-slate-700">{page.lastModified}</p>
+
+              <div className="flex items-center justify-end gap-1">
+                <button
+                  onClick={() => onEdit(page)}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  aria-label="Edit page"
+                >
+                  <Pencil className="h-3.5! w-3.5!" />
+                </button>
+                <button
+                  onClick={() => onDelete(page.id)}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  aria-label="Delete page"
+                >
+                  <Trash2 className="h-3.5! w-3.5!" />
+                </button>
+                <button
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  aria-label="More actions"
+                >
+                  <MoreVertical className="h-3.5! w-3.5!" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
-};
+}
 
-export default PageList;
+
