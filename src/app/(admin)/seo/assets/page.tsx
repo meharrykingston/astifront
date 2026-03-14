@@ -292,11 +292,11 @@ export default function AssetsPage() {
                     <div className="min-w-0">
                       <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{asset.name}</p>
                       <p className="text-xs sm:text-sm text-slate-500">
-                        {asset.id} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {asset.uploadedAt} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {asset.uploadedBy}
+                        {asset.id} {asset.uploadedAt} {asset.uploadedBy}
                       </p>
                     </div>
                     <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs sm:text-sm font-semibold text-slate-700">
-                      {asset.type} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {asset.format} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {asset.sizeMb.toFixed(2)} MB
+                      {asset.type} {asset.format} {asset.sizeMb.toFixed(2)} MB
                     </span>
                     <span className={`rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClass[asset.status]}`}>
                       {asset.status}
