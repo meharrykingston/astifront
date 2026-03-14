@@ -290,15 +290,6 @@ export default function DashboardPage() {
                 ))}
 
                 <line x1={chartFrame.left} y1={chartFrame.top} x2={chartFrame.left} y2={chartFrame.bottom} stroke="#64748b" strokeWidth="1.3" />
-                <line
-                  x1={chartFrame.left}
-                  y1={chartFrame.bottom}
-                  x2={chartFrame.width - chartFrame.right}
-                  y2={chartFrame.bottom}
-                  stroke="#64748b"
-                  strokeWidth="1.3"
-                />
-
                 <path d={areaPath(trafficImpressionPoints)} fill="#14b8a6" fillOpacity="0.75" />
                 <path d={linePath(trafficImpressionPoints)} fill="none" stroke="#0ea5a3" strokeWidth="2" />
                 <path d={linePath(trafficClickPoints)} fill="none" stroke="#2563eb" strokeWidth="2" />
@@ -370,7 +361,7 @@ export default function DashboardPage() {
               </span>
             </div>
             <div className="mt-1 text-center text-xs sm:text-sm text-slate-700 sm:hidden">
-              {chartLabels[activeIndex]} Ãƒâ€šÃ‚Â· impressions {impressionsData[activeIndex].toLocaleString()} Ãƒâ€šÃ‚Â· clicks{' '}
+              {chartLabels[activeIndex]} · impressions {impressionsData[activeIndex].toLocaleString()} · clicks{' '}
               {clicksData[activeIndex].toLocaleString()}
             </div>
           </article>
@@ -473,7 +464,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-1 text-center text-xs sm:text-sm text-slate-700 sm:hidden">
-              {chartLabels[activePositionIndex]} Ãƒâ€šÃ‚Â· position {positionData[activePositionIndex].toFixed(1)}
+              {chartLabels[activePositionIndex]} · position {positionData[activePositionIndex].toFixed(1)}
             </div>
           </article>
         </div>
@@ -569,5 +560,4 @@ export default function DashboardPage() {
     </section>
   );
 }
-
 

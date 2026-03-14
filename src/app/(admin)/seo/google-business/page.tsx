@@ -226,7 +226,7 @@ export default function GoogleBusinessPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{service.name}</p>
-                      <p className="text-xs sm:text-sm text-slate-500">{service.category} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {service.priceLabel}</p>
+                      <p className="text-xs sm:text-sm text-slate-500">{service.category} {service.priceLabel}</p>
                     </div>
                     <div className="flex gap-1">
                       <span className={`rounded-full px-2 py-0.5 text-xs sm:text-sm font-semibold ${statusClass[service.status]}`}>
@@ -343,7 +343,7 @@ export default function GoogleBusinessPage() {
                     <span className="text-xs sm:text-sm text-slate-500">{review.date}</span>
                   </div>
                   <p className="mt-1 text-xs sm:text-sm text-amber-600">
-                    {"ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â¦".repeat(review.rating)}{"ÃƒÂ¢Ã‹Å“Ã¢â‚¬Â ".repeat(5 - review.rating)}
+                    {"".repeat(review.rating)}{"".repeat(5 - review.rating)}
                   </p>
                   <p className="mt-1 text-xs sm:text-sm text-slate-600">{review.text}</p>
                   <div className="mt-2 flex items-center gap-1">

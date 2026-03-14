@@ -107,7 +107,7 @@ function BlogEditor({
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-2 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-[1100px] space-y-4">
+      <div className="mx-auto w-full max-w-275 space-y-4">
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={onBack}
@@ -200,7 +200,7 @@ function BlogEditor({
 function BlogPreview({ post, onBack }: { post: BlogPost; onBack: () => void }) {
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-[900px] space-y-4">
+      <div className="mx-auto w-full max-w-225 space-y-4">
         <button
           onClick={onBack}
           className="inline-flex h-8 items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
@@ -248,7 +248,7 @@ function BlogImport({ onBack, onImport }: { onBack: () => void; onImport: (items
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-[900px] space-y-4">
+      <div className="mx-auto w-full max-w-225 space-y-4">
         <div className="flex items-center justify-between">
           <button
             onClick={onBack}
@@ -358,7 +358,7 @@ export default function BlogPage() {
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 p-3 font-['Sora'] text-slate-900 sm:p-5 lg:p-6">
-      <div className="mx-auto w-full max-w-[1500px] min-w-0 space-y-4 px-1 sm:px-0">
+      <div className="mx-auto w-full max-w-375 min-w-0 space-y-4 px-1 sm:px-0">
         <header className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">Blog Management</h1>

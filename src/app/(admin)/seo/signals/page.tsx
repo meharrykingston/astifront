@@ -286,7 +286,7 @@ export default function SignalsPage() {
                   >
                     <span className="font-semibold text-slate-800">{signalLabel[type]}</span>
                     <span className="text-slate-600">
-                      {list.length} items ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {up} improving
+                      {list.length} items {up} improving
                     </span>
                   </div>
                 );
@@ -309,7 +309,7 @@ export default function SignalsPage() {
                   <div className="min-w-0">
                     <p className="truncate text-xs sm:text-sm font-semibold text-slate-900">{row.page}</p>
                     <p className="text-xs sm:text-sm text-slate-500">
-                      {row.id} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {signalLabel[row.signal]}
+                      {row.id} {signalLabel[row.signal]}
                     </p>
                   </div>
 
