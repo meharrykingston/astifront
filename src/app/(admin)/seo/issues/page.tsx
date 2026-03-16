@@ -262,7 +262,7 @@ export default function IssuesPage() {
         </header>
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
             <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100">
               <FileWarning className="h-3.5! w-3.5! text-slate-700" />
             </div>
@@ -270,7 +270,7 @@ export default function IssuesPage() {
             <p className="text-xl font-semibold leading-none">{totalIssues}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
             <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-rose-50">
               <ShieldAlert className="h-3.5! w-3.5! text-rose-600" />
             </div>
@@ -278,7 +278,7 @@ export default function IssuesPage() {
             <p className="text-xl font-semibold leading-none">{highPriority}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
             <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50">
               <AlertTriangle className="h-3.5! w-3.5! text-amber-600" />
             </div>
@@ -286,7 +286,7 @@ export default function IssuesPage() {
             <p className="text-xl font-semibold leading-none">{openIssues}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm">
             <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50">
               <Gauge className="h-3.5! w-3.5! text-emerald-600" />
             </div>
@@ -436,5 +436,4 @@ export default function IssuesPage() {
     </section>
   );
 }
-
 

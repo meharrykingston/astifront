@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
-import { UserCircle2 } from 'lucide-react';
+import { Menu, UserCircle2 } from 'lucide-react';
 
 const SEO_USER_NAME_KEY = 'seo_user_name';
 
@@ -38,9 +38,11 @@ export default function SeoLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="md:hidden p-2 bg-white rounded-md shadow border border-gray-200"
+              className="md:hidden rounded-md border border-gray-200 bg-white p-2 shadow"
+              aria-label="Open sidebar menu"
+              title="Open menu"
             >
-              Menu
+              <Menu className="h-5 w-5 text-slate-700" />
             </button>
             <p className="text-xs sm:text-sm font-semibold text-slate-700">
               {greeting}
@@ -59,4 +61,3 @@ export default function SeoLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
