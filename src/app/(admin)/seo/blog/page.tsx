@@ -387,10 +387,10 @@ export default function BlogPage() {
         </header>
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Total Posts</p><p className="mt-1 text-xl font-semibold leading-none">{total}</p></div>
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Published</p><p className="mt-1 text-xl font-semibold leading-none">{published}</p></div>
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Drafts</p><p className="mt-1 text-xl font-semibold leading-none">{drafts}</p></div>
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Avg SEO Score</p><p className="mt-1 text-xl font-semibold leading-none">{avgScore}</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Total Posts</p><p className="mt-1 text-xl font-semibold leading-none">{total}</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Published</p><p className="mt-1 text-xl font-semibold leading-none">{published}</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Drafts</p><p className="mt-1 text-xl font-semibold leading-none">{drafts}</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-center shadow-sm"><p className="text-xs sm:text-sm text-slate-600">Avg SEO Score</p><p className="mt-1 text-xl font-semibold leading-none">{avgScore}</p></div>
         </div>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">

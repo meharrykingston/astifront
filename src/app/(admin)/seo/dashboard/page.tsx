@@ -217,22 +217,18 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
           {metrics.map((metric) => {
             const Icon = metric.icon;
             const TrendIcon = metric.positive ? TrendingUp : TrendingDown;
             return (
               <article
                 key={metric.title}
-                className="rounded-2xl border border-slate-200 bg-white p-3.5 shadow-[0_1px_1px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                className="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-[0_1px_1px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
               >
-                <div className="mb-3 flex items-start justify-between">
+                <div className="mb-2 flex items-center justify-center">
                   <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${metric.iconWrapClass}`}>
                     <Icon className={`h-3.5! w-3.5! ${metric.iconClass}`} strokeWidth={2.2} />
-                  </div>
-                  <div className={`inline-flex items-center gap-1 text-xs sm:text-sm font-medium ${metric.trendClass}`}>
-                    <TrendIcon className="h-3.5! w-3.5!" strokeWidth={2.3} />
-                    <span>{metric.change}</span>
                   </div>
                 </div>
 
@@ -240,6 +236,10 @@ export default function DashboardPage() {
                 <p className="mt-1.5 text-2xl font-semibold leading-none tracking-tight text-slate-950 sm:text-3xl">
                   {metric.value}
                 </p>
+                <div className={`mt-2 inline-flex items-center justify-center gap-1 text-xs sm:text-sm font-medium ${metric.trendClass}`}>
+                  <TrendIcon className="h-3.5! w-3.5!" strokeWidth={2.3} />
+                  <span>{metric.change}</span>
+                </div>
               </article>
             );
           })}
@@ -560,4 +560,3 @@ export default function DashboardPage() {
     </section>
   );
 }
-
