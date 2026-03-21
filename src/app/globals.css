@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
+@import "react-quill-new/dist/quill.snow.css";
 
 :root {
   --primary: #2f6df6;
@@ -38,6 +39,39 @@
 html {
   scroll-behavior: smooth;
 }
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose ul {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+  list-style: disc outside;
+}
+
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.25rem;
+  list-style: decimal outside;
+}
+
+.prose li {
+  margin-bottom: 0.25rem;
+}
+
+.prose li[data-list="bullet"] {
+  list-style-type: disc;
+}
+
+.prose li[data-list="ordered"] {
+  list-style-type: decimal;
+}
+
+.prose .ql-ui {
+  display: none;
+}
+
 
 body {
   margin: 0;

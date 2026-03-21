@@ -1,49 +1,55 @@
 "use client";
 
-import React, { useMemo, useState } from 'react';
-import {
-  Filter,
-  Plus,
-  Search,
-  SlidersHorizontal,
-  Upload,
-} from 'lucide-react';
-import PageList from './components/PageList';
-import UploadDropzone from './components/UploadDropzone';
-import Builder from './components/Builder';
-
-export type SeoPage = {
-  id: number;
-  title: string;
-  slug: string;
-  status: 'published' | 'draft' | 'scheduled';
-  author: string;
-  views: number;
-  lastModified: string;
-};
-
-const seedPages: SeoPage[] = [
-  { id: 1, title: 'Homepage', slug: '/', status: 'published', author: 'John Doe', views: 45678, lastModified: '2026-03-13' },
-  { id: 2, title: 'About Us', slug: '/about', status: 'published', author: 'Jane Smith', views: 12345, lastModified: '2026-03-12' },
-  { id: 3, title: 'Contact', slug: '/contact', status: 'published', author: 'John Doe', views: 8901, lastModified: '2026-03-10' },
-  { id: 4, title: 'Services Overview', slug: '/services', status: 'published', author: 'Jane Smith', views: 23456, lastModified: '2026-03-09' },
-  { id: 5, title: 'Pricing Plans', slug: '/pricing', status: 'draft', author: 'John Doe', views: 0, lastModified: '2026-03-08' },
-  { id: 6, title: 'Blog Landing', slug: '/blog', status: 'published', author: 'Jane Smith', views: 34567, lastModified: '2026-03-07' },
-  { id: 7, title: 'Product Features', slug: '/features', status: 'published', author: 'John Doe', views: 19876, lastModified: '2026-03-06' },
-  { id: 8, title: 'Help Center', slug: '/help', status: 'scheduled', author: 'Priya Mehta', views: 0, lastModified: '2026-03-14' },
-];
+import React, { useEffect, useMemo, useState } from "react";
+import { Filter, Plus, RefreshCw, Search, SlidersHorizontal, Upload } from "lucide-react";
+import PageList from "./components/PageList";
+import UploadDropzone from "./components/UploadDropzone";
+import Builder from "./components/Builder";
+import type { SeoPageRecord, UpsertSeoPagePayload } from "@/types/seoPage";
+import { deleteSeoPage, listSeoPages, updateSeoPage } from "@/lib/seoPagesApi";
 
 export default function PagesManager() {
-  const [activeView, setActiveView] = useState<'list' | 'upload' | 'builder'>('list');
-  const [editingPage, setEditingPage] = useState<SeoPage | null>(null);
-  const [query, setQuery] = useState('');
+  const [activeView, setActiveView] = useState<"list" | "upload" | "builder">("list");
+  const [editingPage, setEditingPage] = useState<SeoPageRecord | null>(null);
+  const [query, setQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<'all' | SeoPage['status']>('all');
-  const [authorFilter, setAuthorFilter] = useState<'all' | string>('all');
-  const [sortBy, setSortBy] = useState<'recent' | 'views_desc' | 'views_asc' | 'title_asc'>('recent');
-  const [pages, setPages] = useState<SeoPage[]>(seedPages);
+  const [statusFilter, setStatusFilter] = useState<"all" | SeoPageRecord["status"]>("all");
+  const [authorFilter, setAuthorFilter] = useState<"all" | string>("all");
+  const [sortBy, setSortBy] = useState<"recent" | "views_desc" | "views_asc" | "title_asc">("recent");
+  const [itemsPerView, setItemsPerView] = useState<50 | 100 | 200>(50);
+  const [pages, setPages] = useState<SeoPageRecord[]>([]);
+  const [selectedPageIds, setSelectedPageIds] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isBulkSaving, setIsBulkSaving] = useState(false);
+  const [error, setError] = useState("");
 
-  const authors = useMemo(() => ['all', ...new Set(pages.map((p) => p.author))], [pages]);
+  const authors = useMemo(() => ["all", ...new Set(pages.map((p) => p.author))], [pages]);
+
+  const loadPages = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await listSeoPages();
+      const normalizedData = data.map((page) => {
+        const rawKind = String((page as SeoPageRecord & { pageKind?: string }).pageKind || "").toLowerCase();
+        const pageKind = rawKind === "condition" ? "cause" : rawKind;
+        return {
+          ...page,
+          pageKind: pageKind as SeoPageRecord["pageKind"],
+        };
+      });
+      setPages(normalizedData);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unable to load pages";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadPages();
+  }, []);
 
   const filteredPages = useMemo(() => {
     let result = [...pages];
@@ -51,43 +57,184 @@ export default function PagesManager() {
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
-        (p) => p.title.toLowerCase().includes(q) || p.slug.toLowerCase().includes(q) || p.author.toLowerCase().includes(q),
+        (p) =>
+          p.titleTag.toLowerCase().includes(q) ||
+          p.url.toLowerCase().includes(q) ||
+          p.author.toLowerCase().includes(q) ||
+          String(p.targetKeyword || "").toLowerCase().includes(q) ||
+          String(p.metaTag || "").toLowerCase().includes(q) ||
+          (p.keywordPlacement || []).some((keyword) => String(keyword || "").toLowerCase().includes(q)),
       );
     }
 
-    if (statusFilter !== 'all') {
+    if (statusFilter !== "all") {
       result = result.filter((p) => p.status === statusFilter);
     }
 
-    if (authorFilter !== 'all') {
+    if (authorFilter !== "all") {
       result = result.filter((p) => p.author === authorFilter);
     }
 
     result.sort((a, b) => {
-      if (sortBy === 'views_desc') return b.views - a.views;
-      if (sortBy === 'views_asc') return a.views - b.views;
-      if (sortBy === 'title_asc') return a.title.localeCompare(b.title);
-      return b.lastModified.localeCompare(a.lastModified);
+      if (sortBy === "views_desc") return b.views - a.views;
+      if (sortBy === "views_asc") return a.views - b.views;
+      if (sortBy === "title_asc") return a.titleTag.localeCompare(b.titleTag);
+      return b.updatedAt.localeCompare(a.updatedAt);
     });
 
     return result;
   }, [pages, query, statusFilter, authorFilter, sortBy]);
 
+  const visiblePages = useMemo(() => filteredPages.slice(0, itemsPerView), [filteredPages, itemsPerView]);
+
+  useEffect(() => {
+    setSelectedPageIds((prev) => prev.filter((id) => visiblePages.some((page) => page.id === id)));
+  }, [visiblePages]);
+
+  const pageStats = useMemo(() => {
+    const counts = pages.reduce<Record<string, number>>((acc, page) => {
+      const kind = String(page.pageKind || "unknown").toLowerCase();
+      acc[kind] = (acc[kind] || 0) + 1;
+      return acc;
+    }, {});
+
+    const typeCards = Object.entries(counts)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([kind, count]) => ({
+        key: kind,
+        label: `${kind.charAt(0).toUpperCase()}${kind.slice(1)} Pages`,
+        count,
+      }));
+
+    return {
+      total: pages.length,
+      typeCards,
+    };
+  }, [pages]);
+
   const openCreateBuilder = () => {
     setEditingPage(null);
-    setActiveView('builder');
+    setActiveView("builder");
   };
 
-  const onDeletePage = (pageId: number) => {
-    setPages((prev) => prev.filter((page) => page.id !== pageId));
+  const onDeletePage = async (pageId: string) => {
+    const pageToDelete = pages.find((page) => page.id === pageId);
+    const label = pageToDelete?.titleTag || pageToDelete?.url || "this page";
+    const shouldDelete = window.confirm(`Are you sure you want to delete "${label}"?`);
+    if (!shouldDelete) return;
+
+    try {
+      await deleteSeoPage(pageId);
+      setSelectedPageIds((prev) => prev.filter((id) => id !== pageId));
+      await loadPages();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unable to delete page";
+      setError(message);
+    }
   };
 
-  if (activeView === 'upload') {
-    return <UploadDropzone onBack={() => setActiveView('list')} />;
+  const toUpdatePayload = (page: SeoPageRecord, nextStatus?: SeoPageRecord["status"]): UpsertSeoPagePayload => ({
+    pageKind: page.pageKind,
+    targetKeyword: page.targetKeyword || "",
+    overview: page.overview || "",
+    sections: page.sections || [],
+    content: page.content || "",
+    quickAnswer: page.quickAnswer || "",
+    titleTag: page.titleTag || "",
+    metaTag: page.metaTag || "",
+    metaDescription: page.metaDescription || "",
+    url: page.url || "",
+    status: nextStatus || page.status,
+    author: page.author || "SEO Team",
+    headingStructure: {
+      h1: page.headingStructure?.h1 || "",
+      h2: (page.headingStructure?.h2 || []).join("\n"),
+      h3: (page.headingStructure?.h3 || []).join("\n"),
+    },
+    keywordPlacement: (page.keywordPlacement || []).join("\n"),
+    imageAltText: (page.imageAltText || []).join("\n"),
+    internalLinks: (page.internalLinks || []).join("\n"),
+  });
+
+  const toggleSelect = (pageId: string) => {
+    setSelectedPageIds((prev) => (prev.includes(pageId) ? prev.filter((id) => id !== pageId) : [...prev, pageId]));
+  };
+
+  const toggleSelectAll = () => {
+    const filteredIds = visiblePages.map((page) => page.id);
+    const areAllVisibleSelected =
+      filteredIds.length > 0 && filteredIds.every((id) => selectedPageIds.includes(id));
+
+    setSelectedPageIds((prev) =>
+      areAllVisibleSelected
+        ? prev.filter((id) => !filteredIds.includes(id))
+        : [...new Set([...prev, ...filteredIds])],
+    );
+  };
+
+  const runBulkStatusUpdate = async (nextStatus: SeoPageRecord["status"]) => {
+    const selectedPages = visiblePages.filter((page) => selectedPageIds.includes(page.id));
+    const targetPages = selectedPages.filter((page) => page.status !== nextStatus);
+    if (targetPages.length === 0) return;
+
+    setIsBulkSaving(true);
+    setError("");
+    try {
+      await Promise.all(targetPages.map((page) => updateSeoPage(page.id, toUpdatePayload(page, nextStatus))));
+      await loadPages();
+      setSelectedPageIds([]);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : `Unable to bulk update to ${nextStatus}`;
+      setError(message);
+    } finally {
+      setIsBulkSaving(false);
+    }
+  };
+
+  const runBulkDelete = async () => {
+  if (selectedPageIds.length === 0) return;
+
+  const shouldDelete = window.confirm(`Delete ${selectedPageIds.length} selected pages?`);
+  if (!shouldDelete) return;
+
+  setIsBulkSaving(true);
+  setError("");
+  
+  try {
+    // Ek hi baar mein saari IDs bhej rahe hain
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/pages/bulk-delete`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: selectedPageIds }), // Body ab empty nahi hai!
+    });
+
+    if (!response.ok) throw new Error("Bulk delete failed");
+
+    await loadPages();
+    setSelectedPageIds([]);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Unable to bulk delete");
+  } finally {
+    setIsBulkSaving(false);
+  }
+};
+
+  const onSavePage = async (_payload: UpsertSeoPagePayload, _pageId?: string) => {
+    await loadPages();
+  };
+
+  if (activeView === "upload") {
+    return <UploadDropzone onBack={() => setActiveView("list")} />;
   }
 
-  if (activeView === 'builder') {
-    return <Builder pageData={editingPage ?? undefined} onBack={() => setActiveView('list')} />;
+  if (activeView === "builder") {
+    return (
+      <Builder
+        pageData={editingPage ?? undefined}
+        onBack={() => setActiveView("list")}
+        onSave={onSavePage}
+      />
+    );
   }
 
   return (
@@ -101,7 +248,14 @@ export default function PagesManager() {
 
           <div className="flex w-full flex-wrap gap-2 lg:w-auto">
             <button
-              onClick={() => setActiveView('upload')}
+              onClick={() => void loadPages()}
+              className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-100 lg:flex-none"
+            >
+              <RefreshCw className="h-3.5! w-3.5!" />
+              Refresh
+            </button>
+            <button
+              onClick={() => setActiveView("upload")}
               className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-800 shadow-sm transition hover:bg-slate-100 lg:flex-none"
             >
               <Upload className="h-3.5! w-3.5!" />
@@ -116,6 +270,64 @@ export default function PagesManager() {
             </button>
           </div>
         </header>
+
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs sm:text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+            <p className="text-xs sm:text-sm font-medium text-slate-500">Total Pages</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900">{pageStats.total}</p>
+          </div>
+
+          {pageStats.typeCards.map((card) => (
+            <div key={card.key} className="text-center rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <p className="text-xs sm:text-sm font-medium text-slate-500">{card.label}</p>
+              <p className="mt-1 text-2xl font-semibold text-slate-900">{card.count}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <label className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-700">
+              <input
+                type="checkbox"
+                checked={visiblePages.length > 0 && visiblePages.every((page) => selectedPageIds.includes(page.id))}
+                onChange={toggleSelectAll}
+                className="h-4 w-4 rounded border-slate-300"
+              />
+              Select all visible ({selectedPageIds.length} selected)
+            </label>
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => void runBulkStatusUpdate("draft")}
+                disabled={selectedPageIds.length === 0 || isBulkSaving}
+                className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-slate-100"
+              >
+                Bulk Draft
+              </button>
+              <button
+                onClick={() => void runBulkStatusUpdate("published")}
+                disabled={selectedPageIds.length === 0 || isBulkSaving}
+                className="inline-flex h-8 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-xs sm:text-sm font-medium text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-emerald-100"
+              >
+                Bulk Publish
+              </button>
+              <button
+                onClick={() => void runBulkDelete()}
+                disabled={selectedPageIds.length === 0 || isBulkSaving}
+                className="inline-flex h-8 items-center justify-center rounded-lg border border-red-200 bg-red-50 px-3 text-xs sm:text-sm font-medium text-red-700 disabled:cursor-not-allowed disabled:opacity-50 hover:bg-red-100"
+              >
+                Bulk Delete
+              </button>
+            </div>
+          </div>
+        </section>
 
         <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
           <div className="flex flex-col gap-2 md:flex-row md:items-center">
@@ -135,6 +347,19 @@ export default function PagesManager() {
               <Filter className="h-3.5! w-3.5!" />
               Filters
             </button>
+            <label className="inline-flex h-9 items-center gap-2 rounded-xl border border-slate-200 px-3 text-xs sm:text-sm font-medium text-slate-700">
+              Show
+              <select
+                value={itemsPerView}
+                onChange={(e) => setItemsPerView(Number(e.target.value) as 50 | 100 | 200)}
+                className="h-7 rounded-md border border-slate-200 bg-white px-2 text-xs sm:text-sm outline-none"
+              >
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value={200}>200</option>
+              </select>
+              items
+            </label>
           </div>
 
           {showFilters && (
@@ -143,13 +368,12 @@ export default function PagesManager() {
                 Status
                 <select
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as 'all' | SeoPage['status'])}
+                  onChange={(e) => setStatusFilter(e.target.value as "all" | SeoPageRecord["status"])}
                   className="mt-1 h-8 w-full rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm"
                 >
                   <option value="all">All statuses</option>
                   <option value="published">Published</option>
                   <option value="draft">Draft</option>
-                  <option value="scheduled">Scheduled</option>
                 </select>
               </label>
 
@@ -162,7 +386,7 @@ export default function PagesManager() {
                 >
                   {authors.map((author) => (
                     <option key={author} value={author}>
-                      {author === 'all' ? 'All authors' : author}
+                      {author === "all" ? "All authors" : author}
                     </option>
                   ))}
                 </select>
@@ -172,7 +396,7 @@ export default function PagesManager() {
                 Sort By
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as 'recent' | 'views_desc' | 'views_asc' | 'title_asc')}
+                  onChange={(e) => setSortBy(e.target.value as "recent" | "views_desc" | "views_asc" | "title_asc")}
                   className="mt-1 h-8 w-full rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm"
                 >
                   <option value="recent">Last Modified</option>
@@ -184,9 +408,9 @@ export default function PagesManager() {
 
               <button
                 onClick={() => {
-                  setStatusFilter('all');
-                  setAuthorFilter('all');
-                  setSortBy('recent');
+                  setStatusFilter("all");
+                  setAuthorFilter("all");
+                  setSortBy("recent");
                 }}
                 className="inline-flex h-8 items-center justify-center gap-1 rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
               >
@@ -197,17 +421,24 @@ export default function PagesManager() {
           )}
         </section>
 
-        <PageList
-          pages={filteredPages}
-          onEdit={(page) => {
-            setEditingPage(page);
-            setActiveView('builder');
-          }}
-          onDelete={onDeletePage}
-        />
+        {isLoading ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-xs sm:text-sm text-slate-600">
+            Loading pages...
+          </div>
+        ) : (
+          <PageList
+            pages={visiblePages}
+            selectedPageIds={selectedPageIds}
+            onToggleSelect={toggleSelect}
+            onToggleSelectAll={toggleSelectAll}
+            onEdit={(page) => {
+              setEditingPage(page);
+              setActiveView("builder");
+            }}
+            onDelete={onDeletePage}
+          />
+        )}
       </div>
     </div>
   );
 }
-
-
