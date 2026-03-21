@@ -18,7 +18,13 @@ npm run dev
 
 
 6. Environment
-Set NEXT_PUBLIC_API_URL to the backend base URL. Clarity is configured in the application shell and uses a fixed project identifier. If you need to change the identifier, update the script in the app shell.
+Set NEXT_PUBLIC_API_URL to the backend base URL. For local development this is usually http://localhost:4000. For production on Vercel, point to your Railway service URL. Clarity is configured in the application shell and uses a fixed project identifier. If you need to change the identifier, update the script in the app shell.
 
 7. Developer notes
 The SEO panel layout is provided by a shared layout component and applied to each indexcontrol route. SEO authentication uses sessionStorage and role based access to guard editing and delete actions. The superadmin pages are protected on the client by requiring a stored token, and the backend enforces superadmin role checks.
+
+8. Authentication flow
+The IndexControl login route stores a session token in sessionStorage and fetches the current user profile from the backend on each load. Token expiry is enforced using the JWT exp value and idle timeout is enforced in the layout. The supermadin portal stores a token in localStorage and relies on backend role checks for access.
+
+9. Deployment notes
+Vercel builds require NEXT_PUBLIC_API_URL to be defined so that rewrites can resolve safely. If the backend URL is not set, rewrites are disabled automatically.
