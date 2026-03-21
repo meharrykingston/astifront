@@ -1,4 +1,7 @@
-﻿"use client";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
 
 type Props = {
   title?: string;
@@ -6,6 +9,8 @@ type Props = {
 };
 
 export function TopNav({ title = "Astikan", actionLabel = "Emergency" }: Props) {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="top-nav">
       <div className="top-nav__inner">
@@ -20,11 +25,36 @@ export function TopNav({ title = "Astikan", actionLabel = "Emergency" }: Props) 
           </div>
         </div>
 
-        <button className="emergency-btn" type="button">
-          {actionLabel}
-        </button>
+        <div className="top-nav__actions">
+          <button className="emergency-btn" type="button">
+            {actionLabel}
+          </button>
+          <button
+            className="top-nav__toggle"
+            type="button"
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
+      {open && (
+        <div className="top-nav__menu">
+          <Link href="/" className="top-nav__link" onClick={() => setOpen(false)}>
+            Home
+          </Link>
+          <Link href="/analysis" className="top-nav__link" onClick={() => setOpen(false)}>
+            Analysis
+          </Link>
+          <button className="emergency-btn emergency-btn--menu" type="button">
+            {actionLabel}
+          </button>
+        </div>
+      )}
     </header>
   );
 }
-
