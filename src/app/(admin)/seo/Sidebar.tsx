@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import './sidebar.css';
 import {
   LayoutDashboard, FileText, AlertCircle, BookOpen, Link2, 
-  KeyRound, Users, Image, Activity, MapPin, Settings, X
+  KeyRound, Users, Image, Activity, MapPin, BarChart3, Settings, X
 } from 'lucide-react';
 
 const SEO_USER_NAME_KEY = 'seo_user_name';
@@ -27,6 +27,7 @@ const menuItems = [
   { name: 'Competitors', path: '/seo/competitors', icon: Users },
   { name: 'Assets', path: '/seo/assets', icon: Image },
   { name: 'Search Signals', path: '/seo/signals', icon: Activity },
+  { name: 'Semrush', path: '/seo/semrush', icon: BarChart3 },
   { name: 'Google Business', path: '/seo/google-business', icon: MapPin },
   { name: 'Settings', path: '/seo/settings', icon: Settings },
 ];
@@ -106,4 +107,3 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 };
 
 export default Sidebar;
-
