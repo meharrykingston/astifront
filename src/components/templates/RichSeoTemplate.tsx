@@ -196,8 +196,8 @@ export default function RichSeoTemplate({ page, theme }: SeoPageTemplateProps) {
       <header className="sticky top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-350 items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <button onClick={() => scrollToSection("overview")} className="inline-flex items-center gap-3">
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-white text-white shadow-sm border border-slate-200">
-              <img src="/favicon.png" alt="Astikan" style={{ width: 28, height: 28 }} />
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-white">
+              <img src="/favicon.png" alt="Astikan" style={{ width: 34, height: 34 }} />
             </span>
             <span className="text-base font-semibold tracking-tight text-slate-800">Astikan</span>
           </button>

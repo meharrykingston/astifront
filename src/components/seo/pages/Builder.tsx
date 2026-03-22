@@ -3,7 +3,7 @@
 import axios from 'axios';
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Eye, Info, Loader2, Plus, Save, Trash2, X } from "lucide-react";
+import { ArrowLeft, Eye, Loader2, Plus, Save, Trash2 } from "lucide-react";
 import styles from "./builder.module.css";
 import type {
   SeoContentSection,
@@ -189,9 +189,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
   const [form, setForm] = useState<FormState>(() => getInitialForm(pageData));
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isPreviewVisible, setIsPreviewVisible] = useState(true);
   const [error, setError] = useState("");
+  const [showPublishMenu, setShowPublishMenu] = useState(false);
 
   const modeLabel = pageData ? "Update SEO Page" : "Create SEO Page";
   const previewSlug = useMemo(() => normalizePreviewSlug(form.url, form.pageKind), [form.url, form.pageKind]);
@@ -349,94 +349,78 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
 
   return (
     <section className="min-h-screen w-full overflow-x-hidden bg-slate-50 font-['Sora'] text-slate-900">
-      {isHelpOpen && (
-        <div className="fixed inset-0 z-80 grid place-items-center bg-slate-900/40 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:p-6">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="inline-flex items-center gap-2 text-sm sm:text-base font-semibold text-slate-900">
-                <Info className="h-4! w-4!" />
-                SEO Publishing Instructions
-              </h2>
-              <button
-                onClick={() => setIsHelpOpen(false)}
-                className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 px-2 text-slate-600 hover:bg-slate-100"
-              >
-                <X className="h-3.5! w-3.5!" />
-              </button>
-            </div>
-
-            <div className="mt-4 space-y-4 text-xs sm:text-sm text-slate-700">
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <p className="font-semibold text-slate-900">How Section Builder Works</p>
-                <p className="mt-1">Create one content card per section.</p>
-                <p className="mt-1">Write section heading in the top input.</p>
-                <p className="mt-1">Write rich content in editor (bold, list, links).</p>
-                <p className="mt-1">Section headings are used automatically for sidebar navigation.</p>
-              </div>
-
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                <p className="font-semibold text-slate-900">Before You Publish</p>
-                <p className="mt-1">Check Preview, confirm section order, and switch status to `Published` only when final.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className={styles.builderLayout}>
         <div className={styles.topBar}>
-          <button
-            onClick={onBack}
-            className={styles.backIcon}
-            aria-label="Back to pages"
-            title="Back to pages"
-          >
-            <ArrowLeft />
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={onBack}
+              className={styles.backIcon}
+              aria-label="Back to pages"
+              title="Back to pages"
+            >
+              <ArrowLeft />
+            </button>
+            <span className={styles.pageTitle}>
+              {form.h1 || form.titleTag || "Untitled page"}
+            </span>
+          </div>
 
           <div className={styles.actionGroup}>
             <button
               onClick={() => setIsPreviewOpen(true)}
-              className={styles.ghostButton}
+              className={styles.iconButton}
               aria-label="Preview"
+              title="Preview"
             >
               <Eye />
-              <span>Preview</span>
             </button>
 
-            <button
-              onClick={() => setIsHelpOpen(true)}
-              className={styles.ghostButton}
-              aria-label="Instructions"
-            >
-              <Info />
-              <span>Instructions</span>
-            </button>
+            <div className={styles.publishWrap}>
+              <button
+                onClick={() => setShowPublishMenu((v) => !v)}
+                disabled={isSaving}
+                className={styles.publishButton}
+              >
+                {isSaving ? <Loader2 className={styles.spin} /> : <Save />}
+                <span>Publish Page</span>
+              </button>
 
-            <button
-              onClick={submit}
-              disabled={isSaving}
-              className={styles.primaryButton}
-            >
-              {isSaving ? <Loader2 className={styles.spin} /> : <Save />}
-              <span>{isSaving ? "Saving..." : pageData ? "Update Page" : "Create Page"}</span>
-            </button>
+              {showPublishMenu && (
+                <div className={styles.publishMenu}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setForm((prev) => ({ ...prev, status: "published" }));
+                      setShowPublishMenu(false);
+                      setIsPreviewVisible(false);
+                      void submit();
+                    }}
+                  >
+                    Approved
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setForm((prev) => ({ ...prev, status: "draft" }));
+                      setShowPublishMenu(false);
+                      setIsPreviewVisible(false);
+                      void submit();
+                    }}
+                  >
+                    Draft
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         <div className={styles.splitPane} data-preview={isPreviewVisible ? "on" : "off"}>
           <section className={styles.editorPane}>
-            <div className={styles.headerCard}>
-              <h1>{modeLabel}</h1>
-              <p>SEO-first form with dynamic content blocks powered by React Quill.</p>
-              <div className={styles.previewBadge}>Preview URL: {previewSlug}</div>
-            </div>
-
             {error && <div className={styles.errorBox}>{error}</div>}
 
             <div className={styles.formStack}>
               <div className={styles.formCard}>
-                <h2>Required SEO Inputs</h2>
                 <div className={styles.twoColGrid}>
                   <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.titleTag}
