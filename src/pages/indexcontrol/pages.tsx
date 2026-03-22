@@ -126,7 +126,6 @@ const PagesManager = () => {
 
     try {
       await deleteSeoPage(pageId);
-      setSelectedPageIds((prev) => prev.filter((id) => id !== pageId));
       await loadPages();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unable to delete page";
