@@ -34,55 +34,81 @@ export default function SeoLogin() {
 
   return (
     <div className={styles.page}>
-      <div className="min-h-screen w-full bg-slate-50 text-slate-900">
-        <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col justify-center px-4 py-10 sm:px-6">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-            IndexControl
-          </p>
-            <h1 className="mt-2 text-2xl font-semibold text-slate-900">
-              Sign in
-            </h1>
-            <p className="mt-2 text-sm text-slate-600">
-              Use your SEO credentials to access Index Control.
-            </p>
-
-            {error && (
-              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={onSubmit} className="mt-6 space-y-4">
-              <label className="block text-sm font-medium text-slate-700">
-                Email
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-blue-300 focus:bg-white"
-                />
-              </label>
-              <label className="block text-sm font-medium text-slate-700">
-                Password
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-blue-300 focus:bg-white"
-                />
-              </label>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? "Signing in..." : "Sign in"}
-              </button>
-            </form>
+      <div className={styles.shell}>
+        <div className={styles.panel}>
+          <div className={styles.brandRow}>
+            <div className={styles.logoMark} aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 21s-6.7-4.4-9.2-8C.7 10.3 1.4 6.6 4.4 5a5.4 5.4 0 0 1 5.9.7L12 7.1l1.7-1.4A5.4 5.4 0 0 1 19.6 5c3 1.6 3.7 5.3 1.6 8-2.5 3.6-9.2 8-9.2 8Z" />
+              </svg>
+            </div>
+            <div>
+              <p className={styles.kicker}>IndexControl</p>
+              <h1 className={styles.title}>Sign in to manage SEO</h1>
+              <p className={styles.subtitle}>Secure access for your editorial and SEO workflows.</p>
+            </div>
           </div>
+
+          {error && (
+            <div className={styles.errorBox}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={onSubmit} className={styles.form}>
+            <label className={styles.label}>
+              Email
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                className={styles.input}
+                placeholder="you@company.com"
+              />
+            </label>
+            <label className={styles.label}>
+              Password
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className={styles.input}
+                placeholder="Your secure password"
+              />
+            </label>
+            <button
+              type="submit"
+              disabled={loading}
+              className={styles.primaryButton}
+            >
+              {loading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+        </div>
+
+        <div className={styles.preview}>
+          <div className={styles.previewCard}>
+            <p className={styles.previewTitle}>Daily visibility snapshot</p>
+            <p className={styles.previewValue}>1,248</p>
+            <p className={styles.previewLabel}>active pages tracked</p>
+            <div className={styles.previewGrid}>
+              <div>
+                <p className={styles.previewStat}>78%</p>
+                <p className={styles.previewMeta}>published</p>
+              </div>
+              <div>
+                <p className={styles.previewStat}>12</p>
+                <p className={styles.previewMeta}>alerts</p>
+              </div>
+              <div>
+                <p className={styles.previewStat}>24h</p>
+                <p className={styles.previewMeta}>last update</p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.previewGlow} aria-hidden="true" />
         </div>
       </div>
     </div>

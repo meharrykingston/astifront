@@ -6,9 +6,7 @@ import { clearSeoToken, getSeoToken, getTokenExpiryMs, seoMe } from "@/services/
 import { SeoAuthProvider } from "./SeoAuthContext";
 import styles from "./sidebar.module.css";
 import Sidebar from './Sidebar';
-import { Menu, UserCircle2 } from 'lucide-react';
-
-const SEO_USER_NAME_KEY = 'seo_user_name';
+import { Menu } from 'lucide-react';
 
 export default function SeoLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -104,19 +102,7 @@ export default function SeoLayout({ children }: { children: React.ReactNode }) {
             </button>
           </div>
 
-          <div className="inline-flex max-w-full items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs sm:text-sm shadow-sm">
-            <UserCircle2 className="h-4! w-4! text-slate-600" />
-            <span className="truncate font-medium text-slate-700">Hi {userName}</span>
-            <button
-              onClick={() => {
-                clearSeoToken();
-                void router.replace("/indexcontrol/login");
-              }}
-              className="ml-2 rounded-full border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-100"
-            >
-              Sign out
-            </button>
-          </div>
+          <div />
         </header>
         
         {/* Page Content */}

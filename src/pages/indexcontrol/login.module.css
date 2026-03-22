@@ -1,1 +1,253 @@
-.page {}
+.page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #0f172a;
+}
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 32px;
+  padding: 48px 32px;
+  align-items: center;
+}
+
+.panel {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid #e2e8f0;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  position: relative;
+  overflow: hidden;
+  animation: panelIn 0.6s ease;
+}
+
+.brandRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.logoMark {
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #2f6df6, #2fb1a7);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(47, 109, 246, 0.25);
+}
+
+.logoMark svg {
+  width: 28px;
+  height: 28px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.kicker {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #94a3b8;
+  margin: 0 0 8px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.errorBox {
+  margin-top: 20px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.form {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  display: grid;
+  gap: 8px;
+}
+
+.input {
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 0 14px;
+  font-size: 14px;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #93c5fd;
+  background: #ffffff;
+}
+
+.primaryButton {
+  height: 46px;
+  border: none;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
+}
+
+.primaryButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.preview {
+  position: relative;
+  padding: 32px;
+}
+
+.previewCard {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+  min-height: 320px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.previewTitle {
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 250, 252, 0.6);
+}
+
+.previewValue {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.previewLabel {
+  font-size: 14px;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.previewGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.previewStat {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.previewMeta {
+  font-size: 12px;
+  color: rgba(248, 250, 252, 0.6);
+  margin: 4px 0 0;
+}
+
+.previewGlow {
+  position: absolute;
+  inset: 20% 10% auto auto;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(47, 109, 246, 0.35), transparent 70%);
+  filter: blur(10px);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes panelIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 1024px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .preview {
+    order: -1;
+  }
+}
+
+@media (max-width: 720px) {
+  .shell {
+    padding: 32px 16px;
+  }
+
+  .panel {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .previewCard {
+    padding: 24px;
+    min-height: 240px;
+  }
+
+  .previewGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

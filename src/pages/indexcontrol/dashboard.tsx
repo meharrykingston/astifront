@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import SeoLayout from '@/components/seo/SeoLayout';
 import type { NextPageWithLayout } from '../_app';
 import styles from "./dashboard.module.css";
 import {
-  AlertCircle,
   BookOpen,
   BookX,
   Eye,
@@ -27,22 +25,6 @@ type DashboardMetric = {
   trendClass: string;
 };
 
-type QueryRow = {
-  query: string;
-  clicks: number;
-  impressions: number;
-  ctr: string;
-  position: number;
-};
-
-type PageRow = {
-  page: string;
-  clicks: number;
-  impressions: number;
-  ctr: string;
-  position: number;
-};
-
 type Point = { x: number; y: number };
 
 const chartLabels = ['Mar 1', 'Mar 3', 'Mar 5', 'Mar 7', 'Mar 9', 'Mar 11', 'Mar 13'];
@@ -52,9 +34,9 @@ const positionData = [8.4, 8.0, 7.7, 7.3, 7.1, 6.7, 6.4];
 
 const metrics: DashboardMetric[] = [
   {
-    title: 'Active Pages',
-    value: '1,248',
-    change: '+12.5%',
+    title: 'Pages',
+    value: '12,840',
+    change: '+91',
     positive: true,
     icon: FileText,
     iconWrapClass: 'bg-emerald-50',
@@ -62,9 +44,9 @@ const metrics: DashboardMetric[] = [
     trendClass: 'text-emerald-600',
   },
   {
-    title: 'Inactive Pages',
-    value: '87',
-    change: '-5.2%',
+    title: 'Blogs',
+    value: '1,420',
+    change: '+28',
     positive: false,
     icon: FileX2,
     iconWrapClass: 'bg-rose-50',
@@ -72,9 +54,9 @@ const metrics: DashboardMetric[] = [
     trendClass: 'text-rose-600',
   },
   {
-    title: 'Active Blogs',
-    value: '342',
-    change: '+8.3%',
+    title: 'Keywords',
+    value: '54,320',
+    change: '+214',
     positive: true,
     icon: BookOpen,
     iconWrapClass: 'bg-emerald-50',
@@ -82,9 +64,9 @@ const metrics: DashboardMetric[] = [
     trendClass: 'text-emerald-600',
   },
   {
-    title: 'Inactive Blogs',
-    value: '23',
-    change: '-2.1%',
+    title: '404 Pages',
+    value: '156',
+    change: '-12',
     positive: false,
     icon: BookX,
     iconWrapClass: 'bg-rose-50',
@@ -92,41 +74,39 @@ const metrics: DashboardMetric[] = [
     trendClass: 'text-rose-600',
   },
   {
-    title: 'Keywords',
-    value: '5,432',
-    change: '+15.7%',
+    title: "Today's traffic",
+    value: '38,910',
+    change: '+91',
     positive: true,
     icon: KeyRound,
     iconWrapClass: 'bg-emerald-50',
     iconClass: 'text-emerald-600',
     trendClass: 'text-emerald-600',
   },
-  {
-    title: '404 Pages',
-    value: '156',
-    change: '+3.4%',
-    positive: true,
-    icon: AlertCircle,
-    iconWrapClass: 'bg-orange-50',
-    iconClass: 'text-orange-600',
-    trendClass: 'text-orange-600',
-  },
 ];
 
-const topSearchQueries: QueryRow[] = [
-  { query: 'web development tutorial', clicks: 1234, impressions: 45678, ctr: '2.7%', position: 3.2 },
-  { query: 'react best practices', clicks: 987, impressions: 38456, ctr: '2.6%', position: 4.1 },
-  { query: 'seo optimization guide', clicks: 856, impressions: 34221, ctr: '2.5%', position: 5.3 },
-  { query: 'javascript frameworks', clicks: 743, impressions: 29876, ctr: '2.5%', position: 6.7 },
-  { query: 'responsive design tips', clicks: 621, impressions: 25432, ctr: '2.4%', position: 7.2 },
+const latestPageBuilds = [
+  { page: '/symptoms/stomach-pain', status: 'Published', time: '9 min ago' },
+  { page: '/analysis/ai-triage', status: 'Rebuilt', time: '27 min ago' },
+  { page: '/conditions/acid-reflux', status: 'Published', time: '1 hour ago' },
+  { page: '/symptoms/headache', status: 'Rebuilt', time: '2 hours ago' },
+  { page: '/guides/telemedicine', status: 'Published', time: 'Today' },
 ];
 
-const topPerformingPages: PageRow[] = [
-  { page: '/blog/react-hooks-guide', clicks: 3456, impressions: 98765, ctr: '3.5%', position: 2.1 },
-  { page: '/tutorials/javascript-basics', clicks: 2987, impressions: 87654, ctr: '3.4%', position: 2.8 },
-  { page: '/optimization-checklist', clicks: 2543, impressions: 76543, ctr: '3.3%', position: 3.2 },
-  { page: '/guides/web-performance', clicks: 2134, impressions: 65432, ctr: '3.3%', position: 3.9 },
-  { page: '/blog/css-grid-flexbox', clicks: 1876, impressions: 54321, ctr: '3.5%', position: 2.5 },
+const latestBlogBuilds = [
+  { page: '/blog/clinical-triage-ai', status: 'Published', time: '14 min ago' },
+  { page: '/blog/seo-structure', status: 'Rebuilt', time: '46 min ago' },
+  { page: '/blog/schema-updates', status: 'Published', time: '2 hours ago' },
+  { page: '/blog/health-seo', status: 'Rebuilt', time: 'Today' },
+  { page: '/blog/clarity-insights', status: 'Published', time: 'Today' },
+];
+
+const latestQueryBuilds = [
+  { query: 'symptom checker for stomach pain', delta: '+12%', time: '10 min ago' },
+  { query: 'how long does headache last', delta: '+6%', time: '34 min ago' },
+  { query: 'acid reflux diet tips', delta: '+3%', time: '1 hour ago' },
+  { query: 'fever after vaccine', delta: '+9%', time: 'Today' },
+  { query: 'chronic fatigue guide', delta: '+2%', time: 'Today' },
 ];
 
 const chartFrame = {
@@ -210,27 +190,26 @@ const DashboardPage: NextPageWithLayout = () => {
     <div className={styles.page}>
       <section className="w-full overflow-x-hidden font-['Sora']">
       <div className="mx-auto w-full max-w-375 min-w-0">
-        <div className="mb-4 sm:mb-5">
-          <h1 className="text-lg font-semibold tracking-tight text-slate-950 sm:text-xl lg:text-2xl">
-            SEO Analytics &amp; Management
-          </h1>
-          <p className="mt-1 text-xs sm:text-sm text-slate-600">
-            Monitor your website&apos;s search performance and SEO metrics
-          </p>
+        <div className={styles.hero}>
+          <div className={styles.heroGrid}>
+            <div>
+              <h1 className={styles.heroTitle}>Dashboard</h1>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
           {metrics.map((metric) => {
             const Icon = metric.icon;
             const TrendIcon = metric.positive ? TrendingUp : TrendingDown;
             return (
               <article
                 key={metric.title}
-                className="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-[0_1px_1px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                className={`${styles.metricCard} rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-[0_1px_1px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm`}
               >
                 <div className="mb-2 flex items-center justify-center">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${metric.iconWrapClass}`}>
-                    <Icon className={`h-3.5! w-3.5! ${metric.iconClass}`} strokeWidth={2.2} />
+                  <div className={`${styles.metricIconWrap} ${metric.iconWrapClass}`}>
+                    <Icon className={`${styles.metricIcon} ${metric.iconClass}`} strokeWidth={2.2} />
                   </div>
                 </div>
 
@@ -245,6 +224,68 @@ const DashboardPage: NextPageWithLayout = () => {
               </article>
             );
           })}
+        </div>
+
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:mt-7 lg:grid-cols-3">
+          <article className={styles.listCard}>
+            <div className={styles.listHeader}>
+              <h2>Latest Page Builds</h2>
+              <button type="button" className={styles.viewAllBtn}>
+                View All
+              </button>
+            </div>
+            <div className={styles.listBody}>
+              {latestPageBuilds.map((row) => (
+                <button key={row.page} type="button" className={styles.listRow}>
+                  <div>
+                    <p className={styles.listTitle}>{row.page}</p>
+                    <span className={styles.listMeta}>{row.status}</span>
+                  </div>
+                  <span className={styles.listTime}>{row.time}</span>
+                </button>
+              ))}
+            </div>
+          </article>
+
+          <article className={styles.listCard}>
+            <div className={styles.listHeader}>
+              <h2>Latest Blog Builds</h2>
+              <button type="button" className={styles.viewAllBtn}>
+                View All
+              </button>
+            </div>
+            <div className={styles.listBody}>
+              {latestBlogBuilds.map((row) => (
+                <button key={row.page} type="button" className={styles.listRow}>
+                  <div>
+                    <p className={styles.listTitle}>{row.page}</p>
+                    <span className={styles.listMeta}>{row.status}</span>
+                  </div>
+                  <span className={styles.listTime}>{row.time}</span>
+                </button>
+              ))}
+            </div>
+          </article>
+
+          <article className={styles.listCard}>
+            <div className={styles.listHeader}>
+              <h2>Latest Search Queries</h2>
+              <button type="button" className={styles.viewAllBtn}>
+                View All
+              </button>
+            </div>
+            <div className={styles.listBody}>
+              {latestQueryBuilds.map((row) => (
+                <button key={row.query} type="button" className={styles.listRow}>
+                  <div>
+                    <p className={styles.listTitle}>{row.query}</p>
+                    <span className={styles.listMeta}>{row.delta}</span>
+                  </div>
+                  <span className={styles.listTime}>{row.time}</span>
+                </button>
+              ))}
+            </div>
+          </article>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-4 sm:mt-7 lg:grid-cols-2">
@@ -265,6 +306,23 @@ const DashboardPage: NextPageWithLayout = () => {
                 onTouchStart={(e) => onTrafficPointer(e.touches[0].clientX, e.target)}
                 onTouchMove={(e) => onTrafficPointer(e.touches[0].clientX, e.target)}
               >
+                <defs>
+                  <linearGradient id="trafficImpressionFill" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#14b8a6" stopOpacity="0.05" />
+                  </linearGradient>
+                  <linearGradient id="trafficImpressionLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stopColor="#0ea5a3" />
+                    <stop offset="100%" stopColor="#22d3ee" />
+                  </linearGradient>
+                  <linearGradient id="trafficClickLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stopColor="#2563eb" />
+                    <stop offset="100%" stopColor="#60a5fa" />
+                  </linearGradient>
+                  <filter id="trafficGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#0ea5a3" floodOpacity="0.25" />
+                  </filter>
+                </defs>
                 {trafficTicks.map((tick) => (
                   <line
                     key={`traffic-y-${tick.y}`}
@@ -292,14 +350,29 @@ const DashboardPage: NextPageWithLayout = () => {
                 ))}
 
                 <line x1={chartFrame.left} y1={chartFrame.top} x2={chartFrame.left} y2={chartFrame.bottom} stroke="#64748b" strokeWidth="1.3" />
-                <path d={areaPath(trafficImpressionPoints)} fill="#14b8a6" fillOpacity="0.75" />
-                <path d={linePath(trafficImpressionPoints)} fill="none" stroke="#0ea5a3" strokeWidth="2" />
-                <path d={linePath(trafficClickPoints)} fill="none" stroke="#2563eb" strokeWidth="2" />
+                <path d={areaPath(trafficImpressionPoints)} fill="url(#trafficImpressionFill)" />
+                <path
+                  d={linePath(trafficImpressionPoints)}
+                  fill="none"
+                  stroke="url(#trafficImpressionLine)"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#trafficGlow)"
+                />
+                <path
+                  d={linePath(trafficClickPoints)}
+                  fill="none"
+                  stroke="url(#trafficClickLine)"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
 
                 <circle
                   cx={trafficImpressionPoints[activeIndex].x}
                   cy={trafficImpressionPoints[activeIndex].y}
-                  r="4"
+                  r="5"
                   fill="#2563eb"
                   stroke="#fff"
                   strokeWidth="1.5"
@@ -385,6 +458,15 @@ const DashboardPage: NextPageWithLayout = () => {
                 onTouchStart={(e) => onPositionPointer(e.touches[0].clientX, e.target)}
                 onTouchMove={(e) => onPositionPointer(e.touches[0].clientX, e.target)}
               >
+                <defs>
+                  <linearGradient id="positionLine" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0%" stopColor="#8b5cf6" />
+                    <stop offset="100%" stopColor="#c084fc" />
+                  </linearGradient>
+                  <filter id="positionGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#8b5cf6" floodOpacity="0.25" />
+                  </filter>
+                </defs>
                 {positionTicksData.map((tick) => (
                   <line
                     key={`pos-y-${tick.y}`}
@@ -421,14 +503,22 @@ const DashboardPage: NextPageWithLayout = () => {
                   strokeWidth="1.3"
                 />
 
-                <path d={linePath(positionPoints)} fill="none" stroke="#8b5cf6" strokeWidth="2.2" />
+                <path
+                  d={linePath(positionPoints)}
+                  fill="none"
+                  stroke="url(#positionLine)"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#positionGlow)"
+                />
                 {positionPoints.map((point, index) => (
                   <circle
                     key={`pos-point-${index}`}
                     cx={point.x}
                     cy={point.y}
-                    r={index === activePositionIndex ? 5 : 4}
-                    fill="#8b5cf6"
+                    r={index === activePositionIndex ? 5 : 4.2}
+                    fill="#a855f7"
                     onMouseEnter={() => setActivePositionIndex(index)}
                     onClick={() => setActivePositionIndex(index)}
                   />
@@ -471,98 +561,12 @@ const DashboardPage: NextPageWithLayout = () => {
           </article>
         </div>
 
-        <article className="mt-6 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4">
-          <h2 className="mb-3 text-sm lg:text-base font-semibold text-slate-950">Top Search Queries</h2>
-          <div className="md:hidden space-y-2">
-            {topSearchQueries.map((row) => (
-              <div key={`${row.query}-mobile`} className="rounded-lg border border-slate-200 p-2.5">
-                <p className="text-xs sm:text-sm font-medium text-slate-900 wrap-break-word">{row.query}</p>
-                <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs sm:text-sm text-slate-700">
-                  <span>Clicks: {row.clicks.toLocaleString()}</span>
-                  <span>Impr: {row.impressions.toLocaleString()}</span>
-                  <span>CTR: {row.ctr}</span>
-                  <span>Pos: {row.position.toFixed(1)}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs sm:text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 text-slate-700">
-                  <th className="px-3 py-2 font-semibold">Query</th>
-                  <th className="px-3 py-2 font-semibold text-right">Clicks</th>
-                  <th className="px-3 py-2 font-semibold text-right">Impressions</th>
-                  <th className="px-3 py-2 font-semibold text-right">CTR</th>
-                  <th className="px-3 py-2 font-semibold text-right">Position</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topSearchQueries.map((row) => (
-                  <tr key={row.query} className="border-b border-slate-200 last:border-b-0">
-                    <td className="px-3 py-2.5 text-slate-900">{row.query}</td>
-                    <td className="px-3 py-2.5 text-right">{row.clicks.toLocaleString()}</td>
-                    <td className="px-3 py-2.5 text-right">{row.impressions.toLocaleString()}</td>
-                    <td className="px-3 py-2.5 text-right">{row.ctr}</td>
-                    <td className="px-3 py-2.5 text-right">{row.position.toFixed(1)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-
-        <article className="mt-5 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4">
-          <h2 className="mb-3 text-sm lg:text-base font-semibold text-slate-950">Top Performing Pages</h2>
-          <div className="md:hidden space-y-2">
-            {topPerformingPages.map((row) => (
-              <div key={`${row.page}-mobile`} className="rounded-lg border border-slate-200 p-2.5">
-                <Link className="text-xs sm:text-sm font-medium text-blue-600 break-all hover:underline" href={row.page}>
-                  {row.page}
-                </Link>
-                <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs sm:text-sm text-slate-700">
-                  <span>Clicks: {row.clicks.toLocaleString()}</span>
-                  <span>Impr: {row.impressions.toLocaleString()}</span>
-                  <span>CTR: {row.ctr}</span>
-                  <span>Pos: {row.position.toFixed(1)}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs sm:text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 text-slate-700">
-                  <th className="px-3 py-2 font-semibold">Page</th>
-                  <th className="px-3 py-2 font-semibold text-right">Clicks</th>
-                  <th className="px-3 py-2 font-semibold text-right">Impressions</th>
-                  <th className="px-3 py-2 font-semibold text-right">CTR</th>
-                  <th className="px-3 py-2 font-semibold text-right">Position</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topPerformingPages.map((row) => (
-                  <tr key={row.page} className="border-b border-slate-200 last:border-b-0">
-                    <td className="px-3 py-2.5 text-slate-900">
-                      <Link className="text-blue-600 hover:underline" href={row.page}>
-                        {row.page}
-                      </Link>
-                    </td>
-                    <td className="px-3 py-2.5 text-right">{row.clicks.toLocaleString()}</td>
-                    <td className="px-3 py-2.5 text-right">{row.impressions.toLocaleString()}</td>
-                    <td className="px-3 py-2.5 text-right">{row.ctr}</td>
-                    <td className="px-3 py-2.5 text-right">{row.position.toFixed(1)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
       </div>
     </section>
     </div>
   );
 };
+
 
 DashboardPage.getLayout = (page) => <SeoLayout>{page}</SeoLayout>;
 

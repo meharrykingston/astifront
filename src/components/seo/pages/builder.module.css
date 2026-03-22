@@ -1,0 +1,250 @@
+.builderLayout {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.topBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #e2e8f0;
+  backdrop-filter: blur(10px);
+}
+
+.backIcon {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.backIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.actionGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ghostButton,
+.primaryButton {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 14px;
+}
+
+.ghostButton {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+}
+
+.ghostButton svg,
+.primaryButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.primaryButton {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+}
+
+.primaryButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.splitPane {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 20px;
+  padding: 88px 20px 24px;
+}
+
+.editorPane,
+.previewPane {
+  min-width: 0;
+}
+
+.editorPane {
+  max-height: calc(100vh - 112px);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.previewPane {
+  max-height: calc(100vh - 112px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+.previewInner {
+  padding: 20px;
+}
+
+.headerCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  padding: 16px 18px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+.headerCard h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.headerCard p {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.previewBadge {
+  margin-top: 8px;
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  font-size: 12px;
+  color: #475569;
+  font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+}
+
+.errorBox {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.formStack {
+  display: grid;
+  gap: 16px;
+}
+
+.formCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #fff;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+.formCard h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.twoColGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .splitPane {
+    grid-template-columns: 1fr;
+  }
+
+  .splitPane[data-preview="off"] .previewPane {
+    display: none;
+  }
+
+  .splitPane[data-preview="off"] .editorPane {
+    order: 0;
+  }
+
+  .previewPane {
+    order: -1;
+  }
+
+  .editorPane,
+  .previewPane {
+    max-height: unset;
+  }
+}
+
+@media (max-width: 640px) {
+  .actionGroup {
+    gap: 6px;
+  }
+
+  .ghostButton span,
+  .primaryButton span {
+    display: none;
+  }
+
+  .ghostButton,
+  .primaryButton {
+    width: 38px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .twoColGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobileToggle {
+    position: sticky;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 auto 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+    z-index: 20;
+  }
+}
+
+.mobileToggle {
+  display: none;
+}

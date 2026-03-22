@@ -4,6 +4,7 @@ import axios from 'axios';
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { ArrowLeft, Eye, Info, Loader2, Plus, Save, Trash2, X } from "lucide-react";
+import styles from "./builder.module.css";
 import type {
   SeoContentSection,
   SeoPageKind,
@@ -189,6 +190,7 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(true);
   const [error, setError] = useState("");
 
   const modeLabel = pageData ? "Update SEO Page" : "Create SEO Page";
@@ -381,63 +383,62 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
         </div>
       )}
 
-      <div className="sticky top-0 z-60 border-b border-slate-200 bg-white/95 px-3 py-2 backdrop-blur sm:px-5">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2">
+      <div className={styles.builderLayout}>
+        <div className={styles.topBar}>
           <button
             onClick={onBack}
-            className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
+            className={styles.backIcon}
+            aria-label="Back to pages"
+            title="Back to pages"
           >
-            <ArrowLeft className="h-3.5! w-3.5!" />
-            Back to pages
+            <ArrowLeft />
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className={styles.actionGroup}>
             <button
               onClick={() => setIsPreviewOpen(true)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
+              className={styles.ghostButton}
+              aria-label="Preview"
             >
-              <Eye className="h-3.5! w-3.5!" />
-              Preview
+              <Eye />
+              <span>Preview</span>
             </button>
 
             <button
               onClick={() => setIsHelpOpen(true)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100"
+              className={styles.ghostButton}
+              aria-label="Instructions"
             >
-              <Info className="h-3.5! w-3.5!" />
-              Instructions
+              <Info />
+              <span>Instructions</span>
             </button>
 
             <button
               onClick={submit}
               disabled={isSaving}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-blue-600 px-4 text-xs sm:text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className={styles.primaryButton}
             >
-              {isSaving ? <Loader2 className="h-3.5! w-3.5! animate-spin" /> : <Save className="h-3.5! w-3.5!" />}
-              {isSaving ? "Saving..." : pageData ? "Update Page" : "Create Page"}
+              {isSaving ? <Loader2 className={styles.spin} /> : <Save />}
+              <span>{isSaving ? "Saving..." : pageData ? "Update Page" : "Create Page"}</span>
             </button>
           </div>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-5 lg:p-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">{modeLabel}</h1>
-          <p className="mt-1 text-xs sm:text-sm text-slate-600">
-            SEO-first form with dynamic content blocks powered by React Quill.
-          </p>
-          <p className="mt-2 inline-flex rounded-lg bg-slate-100 px-2.5 py-1 text-xs sm:text-sm font-mono text-slate-700">
-            Preview URL: {previewSlug}
-          </p>
-        </div>
+        <div className={styles.splitPane} data-preview={isPreviewVisible ? "on" : "off"}>
+          <section className={styles.editorPane}>
+            <div className={styles.headerCard}>
+              <h1>{modeLabel}</h1>
+              <p>SEO-first form with dynamic content blocks powered by React Quill.</p>
+              <div className={styles.previewBadge}>Preview URL: {previewSlug}</div>
+            </div>
 
-        {error && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-xs sm:text-sm text-red-700">{error}</div>}
+            {error && <div className={styles.errorBox}>{error}</div>}
 
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-            <h2 className="text-sm sm:text-base font-semibold text-slate-900">Required SEO Inputs</h2>
-            <div className="mt-3 grid gap-4 lg:grid-cols-2">
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+            <div className={styles.formStack}>
+              <div className={styles.formCard}>
+                <h2>Required SEO Inputs</h2>
+                <div className={styles.twoColGrid}>
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.titleTag}
                 <input
                   value={form.titleTag}
@@ -447,7 +448,7 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                 />
               </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.url}
                 <input
                   value={form.url}
@@ -458,9 +459,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                 <p className="mt-1 text-xs text-slate-500">
                   Enter only slug like <span className="font-mono">chest-pain</span>. Route is auto-mapped by Page Type.
                 </p>
-              </label>
+                  </label>
 
-              <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
                 {labels.metaDescription}
                 <textarea
                   rows={4}
@@ -468,9 +469,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   onChange={(e) => updateField("metaDescription", e.target.value)}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
                 {labels.overview}
                 <textarea
                   rows={4}
@@ -478,9 +479,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   onChange={(e) => updateField("overview", e.target.value)}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
                 {labels.quickAnswer}
                 <textarea
                   rows={3}
@@ -488,18 +489,18 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   onChange={(e) => updateField("quickAnswer", e.target.value)}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.h1}
                 <input
                   value={form.h1}
                   onChange={(e) => updateField("h1", e.target.value)}
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.targetKeyword}
                 <input
                   value={form.targetKeyword}
@@ -507,9 +508,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder="e.g. chest pain causes"
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.h3}
                 <textarea
                   rows={6}
@@ -518,9 +519,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder={defaultH3}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.keywordPlacement}
                 <textarea
                   rows={6}
@@ -529,9 +530,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder={defaultKeywordPlacement}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.imageAltText}
                 <textarea
                   rows={5}
@@ -540,9 +541,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder={"Person holding chest\nDoctor checking patient"}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="lg:col-span-2 text-xs sm:text-sm font-medium text-slate-700">
                 {labels.internalLinks}
                 <textarea
                   rows={5}
@@ -551,73 +552,73 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder={"/symptoms/headache\n/tests/blood-test"}
                   className="mt-1 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-sm sm:text-base font-semibold text-slate-900">Dynamic Content Sections</h2>
-              <button
-                type="button"
-                onClick={addSection}
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50"
-              >
-                <Plus className="h-3.5! w-3.5!" />
-                Add Section
-              </button>
-            </div>
-
-            {form.sections.length === 0 ? (
-              <button
-                type="button"
-                onClick={addSection}
-                className="mt-4 grid h-36 w-full place-items-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-xs sm:text-sm text-slate-500 hover:bg-slate-100"
-              >
-                Click to add your first content block
-              </button>
-            ) : (
-              <div className="mt-4 space-y-4">
-                {form.sections.map((section, idx) => (
-                  <div key={section.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="mb-3 flex items-center justify-between gap-2">
-                      <p className="text-xs sm:text-sm font-semibold text-slate-800">Section {idx + 1}</p>
-                      <button
-                        type="button"
-                        onClick={() => deleteSection(section.id)}
-                        className="inline-flex h-8 items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-100"
-                      >
-                        <Trash2 className="h-3.5! w-3.5!" />
-                        Delete
-                      </button>
-                    </div>
-
-                    <input
-                      value={section.heading}
-                      onChange={(e) => updateSection(section.id, "heading", e.target.value)}
-                      placeholder="Section heading"
-                      className="w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-2 text-sm sm:text-base font-medium text-slate-900 outline-none focus:border-blue-500"
-                    />
-
-                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50">
-                      <ReactQuill
-                        theme="snow"
-                        modules={quillModules}
-                        value={section.body}
-                        onChange={(value) => updateSection(section.id, "body", value)}
-                        className="[&_.ql-container]:min-h-50 [&_.ql-container]:border-0 [&_.ql-editor]:min-h-50 [&_.ql-editor]:text-sm sm:[&_.ql-editor]:text-base [&_.ql-toolbar]:border-0 [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-slate-200"
-                      />
-                    </div>
-                  </div>
-                ))}
+                  </label>
+                </div>
               </div>
-            )}
-          </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-            <h2 className="text-sm sm:text-base font-semibold text-slate-900">Template Content & Publishing Options</h2>
-            <div className="mt-3 grid gap-4 lg:grid-cols-2">
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+              <div className={styles.formCard}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-sm sm:text-base font-semibold text-slate-900">Dynamic Content Sections</h2>
+                  <button
+                    type="button"
+                    onClick={addSection}
+                    className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    <Plus className="h-3.5! w-3.5!" />
+                    Add Section
+                  </button>
+                </div>
+
+                {form.sections.length === 0 ? (
+                  <button
+                    type="button"
+                    onClick={addSection}
+                    className="mt-4 grid h-36 w-full place-items-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-xs sm:text-sm text-slate-500 hover:bg-slate-100"
+                  >
+                    Click to add your first content block
+                  </button>
+                ) : (
+                  <div className="mt-4 space-y-4">
+                    {form.sections.map((section, idx) => (
+                      <div key={section.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <div className="mb-3 flex items-center justify-between gap-2">
+                          <p className="text-xs sm:text-sm font-semibold text-slate-800">Section {idx + 1}</p>
+                          <button
+                            type="button"
+                            onClick={() => deleteSection(section.id)}
+                            className="inline-flex h-8 items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-100"
+                          >
+                            <Trash2 className="h-3.5! w-3.5!" />
+                            Delete
+                          </button>
+                        </div>
+
+                        <input
+                          value={section.heading}
+                          onChange={(e) => updateSection(section.id, "heading", e.target.value)}
+                          placeholder="Section heading"
+                          className="w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-2 text-sm sm:text-base font-medium text-slate-900 outline-none focus:border-blue-500"
+                        />
+
+                        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50">
+                          <ReactQuill
+                            theme="snow"
+                            modules={quillModules}
+                            value={section.body}
+                            onChange={(value) => updateSection(section.id, "body", value)}
+                            className="[&_.ql-container]:min-h-50 [&_.ql-container]:border-0 [&_.ql-editor]:min-h-50 [&_.ql-editor]:text-sm sm:[&_.ql-editor]:text-base [&_.ql-toolbar]:border-0 [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-slate-200"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.formCard}>
+                <h2 className="text-sm sm:text-base font-semibold text-slate-900">Template Content & Publishing Options</h2>
+                <div className={styles.twoColGrid}>
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.metaTag}
                 <input
                   value={form.metaTag}
@@ -625,18 +626,18 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   placeholder="chest pain, chest tightness, chest pain causes"
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.author}
                 <input
                   value={form.author}
                   onChange={(e) => updateField("author", e.target.value)}
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-xs sm:text-sm outline-none focus:border-blue-300 focus:bg-white"
                 />
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.pageKind}
                 <select
                   value={form.pageKind}
@@ -650,9 +651,9 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   <option value="cause">Cause</option>
                   <option value="treatment">Treatment</option>
                 </select>
-              </label>
+                  </label>
 
-              <label className="text-xs sm:text-sm font-medium text-slate-700">
+                  <label className="text-xs sm:text-sm font-medium text-slate-700">
                 {labels.status}
                 <select
                   value={form.status}
@@ -662,10 +663,26 @@ export default function Builder({ onBack, pageData, onSave }: BuilderProps) {
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
                 </select>
-              </label>
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
+
+          <aside className={styles.previewPane}>
+            <div className={styles.previewInner}>
+              <SeoPageTemplate page={previewPage} />
+            </div>
+          </aside>
         </div>
+
+        <button
+          type="button"
+          className={styles.mobileToggle}
+          onClick={() => setIsPreviewVisible((v) => !v)}
+        >
+          {isPreviewVisible ? "Hide preview" : "Show preview"}
+        </button>
       </div>
     </section>
   );
