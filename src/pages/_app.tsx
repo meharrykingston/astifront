@@ -2,7 +2,6 @@ import type { AppProps } from "next/app";
 import type { NextPage } from "next";
 import type { ReactElement, ReactNode } from "react";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import "../styles/globals.css";
@@ -21,13 +20,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const path = router.asPath || "";
   const shouldLoadClarity =
     !path.startsWith("/indexcontrol") && !path.startsWith("/supermadin");
-  const isIndexControl = path.startsWith("/indexcontrol");
-  const isSuperadmin = path.startsWith("/supermadin");
-  const title = isIndexControl
-    ? "Astikan - IndexControl"
-    : isSuperadmin
-      ? "Astikan - Superadmin"
-      : "Astikan";
   const [routeLoading, setRouteLoading] = useState(false);
 
   useEffect(() => {
@@ -66,31 +58,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta
-          name="description"
-          content="Astikan is an AI-powered health navigator that helps you understand symptoms and find the right next steps."
-        />
-        <meta name="application-name" content="Astikan" />
-        <meta name="theme-color" content="#2f6df6" />
-        <meta name="color-scheme" content="light" />
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="canonical" href="/" />
-        <meta property="og:title" content="Astikan" />
-        <meta
-          property="og:description"
-          content="AI-powered health navigator for symptom analysis and next-step guidance."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Astikan" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Astikan" />
-        <meta
-          name="twitter:description"
-          content="AI-powered health navigator for symptom analysis and next-step guidance."
-        />
-      </Head>
       {shouldLoadClarity && (
         <Script id="clarity-tag" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){

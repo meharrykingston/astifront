@@ -1,7 +1,7 @@
-import Head from "next/head";
 import SeoPageTemplate from "@/components/indexcontrol/SeoPageTemplate";
 import type { SeoPageRecord } from "@/types/seoPage";
 import styles from "./headache.module.css";
+import SeoHead from "@/components/seo/SeoHead";
 
 const pageData: SeoPageRecord = {
   "id": "69ba4c333526f52746c086ce",
@@ -47,11 +47,15 @@ const pageData: SeoPageRecord = {
 export default function GeneratedSeoPage() {
   return (
     <div className={styles.page}>
-      <Head>
-        <title>{pageData.titleTag}</title>
-        <meta name="description" content={pageData.metaDescription} />
-        <meta name="keywords" content={pageData.metaTag} />
-      </Head>
+      <SeoHead
+        title={pageData.titleTag || "Astikan Health"}
+        description={pageData.metaDescription || pageData.overview || "Astikan Health digital healthcare services."}
+        canonicalPath={pageData.url}
+        ogTitle={pageData.titleTag || "Astikan Health"}
+        ogDescription={pageData.metaDescription || pageData.overview || "Astikan Health digital healthcare services."}
+        keywords={pageData.metaTag || undefined}
+        author={pageData.author || "Astikan Health"}
+      />
       <SeoPageTemplate page={pageData} />
     </div>
   );

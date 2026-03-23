@@ -1,8 +1,8 @@
-import Head from "next/head";
 import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import SeoPageTemplate from "@/components/indexcontrol/SeoPageTemplate";
 import type { SeoPageRecord } from "@/types/seoPage";
 import styles from "./[...slug].module.css";
+import SeoHead from "@/components/seo/SeoHead";
 
 const REVALIDATE_SECONDS = 86400;
 
@@ -64,11 +64,15 @@ export default function DynamicSeoPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <div className={styles.page}>
-      <Head>
-        <title>{page.titleTag}</title>
-        <meta name="description" content={page.metaDescription} />
-        <meta name="keywords" content={page.metaTag} />
-      </Head>
+      <SeoHead
+        title={page.titleTag || "Astikan Health"}
+        description={page.metaDescription || page.overview || "Astikan Health digital healthcare services."}
+        canonicalPath={page.url}
+        ogTitle={page.titleTag || "Astikan Health"}
+        ogDescription={page.metaDescription || page.overview || "Astikan Health digital healthcare services."}
+        keywords={page.metaTag || undefined}
+        author={page.author || "Astikan Health"}
+      />
       <SeoPageTemplate page={page} />
     </div>
   );

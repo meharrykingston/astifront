@@ -7,6 +7,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { QuestionCard } from "@/components/home/QuestionCard";
 import { baseQuestions, tunedQuestions } from "@/components/home/questionData";
 import { TopNav } from "@/components/shared/TopNav";
+import SeoHead from "@/components/seo/SeoHead";
 
 export default function Home() {
   const [symptomInput, setSymptomInput] = useState("");
@@ -94,6 +95,21 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <div className={`home-page theme-cycle view-${view}`}>
+      <SeoHead
+        title="Astikan Health | Complete Digital Healthcare"
+        description="Online doctor consultation, lab tests, preventive checkups and medicine delivery with Astikan Health."
+        canonicalPath="/"
+        ogTitle="Astikan Health | Digital Healthcare Platform"
+        ogDescription="AI-powered healthcare platform offering doctor consultation, lab tests and wellness services."
+        ogImage="https://www.astikan.com/home-banner.jpg"
+        twitterTitle="Astikan Health"
+        twitterDescription="AI-powered health navigator and digital healthcare services."
+        twitterImage="https://www.astikan.com/home-banner.jpg"
+        aiAllow="crawl,index,store"
+        aiContent="true"
+        aiEntities="lab test, doctor consultation, healthcare services"
+        aiIntent="healthcare services"
+      />
       <TopNav />
 
       <HeroSection
