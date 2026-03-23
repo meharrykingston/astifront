@@ -28,3 +28,9 @@ The IndexControl login route stores a session token in sessionStorage and fetche
 
 9. Deployment notes
 Vercel builds require NEXT_PUBLIC_API_URL to be defined so that rewrites can resolve safely. If the backend URL is not set, rewrites are disabled automatically.
+
+10. SEO metadata
+Public routes now use a shared SEO head component that sets title, description, canonical URL, Open Graph, Twitter, AI meta, robots, author, language, geo, theme color, charset, and viewport per page. The component is in src/components/seo/SeoHead.tsx and is used by the home page, dynamic SEO pages, and symptom pages.
+
+11. Bulk upload templates
+CSV templates for page and blog bulk upload live under templates. The blog uploader accepts CSV and JSON, while the pages uploader accepts CSV and JSON. Share the templates with the SEO team for consistent headers.
