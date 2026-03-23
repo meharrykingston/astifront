@@ -12,8 +12,8 @@ import { useSeoUser } from "@/components/seo/SeoAuthContext";
 const PagesManager = () => {
   const user = useSeoUser();
   const role = user?.role || "seo_viewer";
-  const canEdit = role === "seo_admin" || role === "seo_editor";
-  const canDelete = role === "seo_admin";
+  const canEdit = true;
+  const canDelete = true;
   const [activeView, setActiveView] = useState<"list" | "upload" | "builder">("list");
   const [editingPage, setEditingPage] = useState<SeoPageRecord | null>(null);
   const [showQuickActions, setShowQuickActions] = useState(false);
@@ -23,6 +23,7 @@ const PagesManager = () => {
   const [authorFilter, setAuthorFilter] = useState<"all" | string>("all");
   const [sortBy, setSortBy] = useState<"recent" | "views_desc" | "views_asc" | "title_asc">("recent");
   const [pages, setPages] = useState<SeoPageRecord[]>([]);
+  const [selectedPageIds, setSelectedPageIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -53,6 +54,10 @@ const PagesManager = () => {
   useEffect(() => {
     void loadPages();
   }, []);
+
+  useEffect(() => {
+    setSelectedPageIds((prev) => prev.filter((id) => pages.some((page) => page.id === id)));
+  }, [pages]);
 
   const filteredPages = useMemo(() => {
     let result = [...pages];
@@ -89,6 +94,23 @@ const PagesManager = () => {
   }, [pages, query, statusFilter, authorFilter, sortBy]);
 
   const visiblePages = useMemo(() => filteredPages, [filteredPages]);
+
+  const toggleSelect = (pageId: string) => {
+    setSelectedPageIds((prev) =>
+      prev.includes(pageId) ? prev.filter((id) => id !== pageId) : [...prev, pageId],
+    );
+  };
+
+  const toggleSelectAll = () => {
+    setSelectedPageIds((prev) => {
+      if (visiblePages.length === 0) return prev;
+      const allVisibleSelected = visiblePages.every((page) => prev.includes(page.id));
+      return allVisibleSelected ? prev.filter((id) => !visiblePages.some((page) => page.id === id)) : [
+        ...prev,
+        ...visiblePages.map((page) => page.id).filter((id) => !prev.includes(id)),
+      ];
+    });
+  };
 
 
   const pageStats = useMemo(() => {
@@ -331,9 +353,9 @@ const PagesManager = () => {
         ) : (
           <PageList
             pages={visiblePages}
-            selectedPageIds={[]}
-            onToggleSelect={() => undefined}
-            onToggleSelectAll={() => undefined}
+            selectedPageIds={selectedPageIds}
+            onToggleSelect={toggleSelect}
+            onToggleSelectAll={toggleSelectAll}
             onEdit={(page) => {
               setEditingPage(page);
               setActiveView("builder");

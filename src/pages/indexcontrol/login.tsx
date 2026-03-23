@@ -102,7 +102,7 @@ export default function SeoLogin() {
                 <p className={styles.previewStat}>12</p>
                 <p className={styles.previewMeta}>alerts</p>
               </div>
-              <div>
+              <div className={styles.previewMobileHidden}>
                 <p className={styles.previewStat}>24h</p>
                 <p className={styles.previewMeta}>last update</p>
               </div>
