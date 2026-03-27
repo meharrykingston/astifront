@@ -56,9 +56,9 @@ function AgentBadge({
 function TypingDots() {
   return (
     <span className="inline-flex items-center gap-1">
-      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_infinite] rounded-full bg-[var(--accent)]" />
-      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_0.2s_infinite] rounded-full bg-[var(--accent)]/70" />
-      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_0.4s_infinite] rounded-full bg-[var(--accent)]/40" />
+      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_infinite] rounded-full bg-(--accent)" />
+      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_0.2s_infinite] rounded-full bg-(--accent)/70" />
+      <span className="h-1.5 w-1.5 animate-[dotPulse_1.4s_0.4s_infinite] rounded-full bg-(--accent)/40" />
     </span>
   );
 }

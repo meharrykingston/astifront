@@ -116,7 +116,7 @@ export function ProcessingSection({
               </div>
             </div>
             <div className="rounded-xl bg-white px-3 py-2 text-xs text-slate-500">
-              User input: {userLabel} · {answersCount} responses captured
+              User input: {userLabel} ï¿½ {answersCount} responses captured
             </div>
           </div>
 
@@ -126,14 +126,14 @@ export function ProcessingSection({
               <span>78%</span>
             </div>
             <div className="mt-2 h-2 rounded-full bg-slate-100">
-              <div className="h-full w-[78%] animate-[progressGlow_4s_linear_infinite] rounded-full bg-gradient-to-r from-[#4ca3ff] via-[#6fb5ff] to-[#2fb1a7]" />
+              <div className="h-full w-[78%] animate-[progressGlow_4s_linear_infinite] rounded-full bg-linear-to-r from-[#4ca3ff] via-[#6fb5ff] to-[#2fb1a7]" />
             </div>
           </div>
         </div>
 
         <div className="relative flex items-center justify-center">
           <div className="absolute -bottom-4 right-6 hidden h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(47,177,167,0.35),rgba(255,255,255,0))] lg:block" />
-          <div className="relative flex h-72 w-full items-center justify-center rounded-3xl border border-slate-200 bg-gradient-to-b from-[#f7fbff] to-white">
+          <div className="relative flex h-72 w-full items-center justify-center rounded-3xl border border-slate-200 bg-linear-to-b from-[#f7fbff] to-white">
             <div className="absolute left-4 top-4 h-16 w-16 rounded-2xl bg-white shadow-sm">
               <Lottie animationData={lottiePulse} loop className="h-16 w-16" />
             </div>

@@ -39,50 +39,57 @@ export function TestsAndTimeline({ tests, timeline }: Props) {
       <div className="rounded-3xl border border-slate-200/70 bg-white p-6 shadow-sm sm:p-8">
         <h3 className="text-xl font-semibold text-slate-900">Recovery timeline</h3>
         <p className="mt-2 text-sm text-slate-600">
-          A gentle recovery path if symptoms stay mild.
+          Typical progression observed for similar symptom patterns.
         </p>
-        <div className="mt-6 grid gap-4">
-          {timeline.map((step) => (
-            <div
-              key={step.range}
-              className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm">
-                <div
-                  className={`h-6 w-6 rounded-full ${
-                    step.intensity === "high"
-                      ? "bg-[#2fb1a7]"
-                      : step.intensity === "medium"
-                      ? "bg-[#8ed9cc]"
-                      : "bg-[#d9f2ed]"
-                  }`}
-                />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">{step.range}</p>
-                <p className="text-xs text-slate-500">{step.text}</p>
-              </div>
-              <div className="ml-auto hidden h-12 w-16 items-center justify-center rounded-full border border-slate-200 bg-white text-xs font-semibold text-slate-500 sm:flex">
-                {step.intensity === "high"
-                  ? "Active"
-                  : step.intensity === "medium"
-                  ? "Healing"
-                  : "Calm"}
+        <div className="mt-6 space-y-4">
+          {timeline.map((step, index) => (
+            <div key={step.range} className="relative rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4">
+              {index < timeline.length - 1 && (
+                <span className="absolute left-[27px] top-[54px] h-[calc(100%-38px)] w-[2px] bg-slate-200" />
+              )}
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border border-white bg-white shadow-sm">
+                  <div
+                    className={`h-3.5 w-3.5 rounded-full ${
+                      step.intensity === "high"
+                        ? "bg-[#2fb1a7]"
+                        : step.intensity === "medium"
+                        ? "bg-[#8ed9cc]"
+                        : "bg-[#d9f2ed]"
+                    }`}
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-sm font-semibold text-slate-900">{step.range}</p>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                        step.intensity === "high"
+                          ? "bg-[#e7f7f3] text-[#2b7f74]"
+                          : step.intensity === "medium"
+                          ? "bg-[#edf8f5] text-[#3d8f82]"
+                          : "bg-slate-200/60 text-slate-600"
+                      }`}
+                    >
+                      {step.intensity === "high"
+                        ? "Active symptoms"
+                        : step.intensity === "medium"
+                        ? "Improving"
+                        : "Recovery phase"}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-500">{step.text}</p>
+                </div>
+                <div className="hidden rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-500 sm:block">
+                  {step.intensity === "high"
+                    ? "Monitor closely"
+                    : step.intensity === "medium"
+                    ? "Continue care"
+                    : "Stabilizing"}
+                </div>
               </div>
             </div>
           ))}
-        </div>
-        <div className="mt-6 flex items-center justify-center">
-          <div className="relative h-40 w-28">
-            <svg viewBox="0 0 140 220" className="h-full w-full">
-              <path
-                d="M70 10c24 0 44 20 44 44 0 16-8 30-20 36v20c0 14 8 24 16 32 8 8 14 20 14 34 0 32-22 64-54 64s-54-32-54-64c0-14 6-26 14-34 8-8 16-18 16-32v-20c-12-6-20-20-20-36 0-24 20-44 44-44Z"
-                fill="#edf2f9"
-              />
-            </svg>
-            <div className="absolute left-1/2 top-[60%] h-10 w-10 -translate-x-1/2 rounded-full bg-[#c9f3ea]" />
-            <div className="absolute left-1/2 top-[60%] h-6 w-6 -translate-x-1/2 rounded-full bg-[#2fb1a7] opacity-40" />
-          </div>
         </div>
       </div>
     </motion.section>

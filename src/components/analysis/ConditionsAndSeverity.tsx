@@ -61,7 +61,7 @@ export function ConditionsAndSeverity({
             <span>Moderate</span>
             <span>Urgent</span>
           </div>
-          <div className="mt-3 h-3 rounded-full bg-gradient-to-r from-[#2fb1a7] via-[#f3c969] to-[#f17a7a]">
+          <div className="mt-3 h-3 rounded-full bg-linear-to-r from-[#2fb1a7] via-[#f3c969] to-[#f17a7a]">
             <div className="relative h-full" style={{ width: severityWidth }}>
               <span className="absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white bg-[#2fb1a7] shadow-[0_0_12px_rgba(47,177,167,0.6)]" />
             </div>
