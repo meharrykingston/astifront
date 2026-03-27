@@ -45,7 +45,7 @@ export function TestsAndTimeline({ tests, timeline }: Props) {
           {timeline.map((step, index) => (
             <div key={step.range} className="relative rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4">
               {index < timeline.length - 1 && (
-                <span className="absolute left-[27px] top-[54px] h-[calc(100%-38px)] w-[2px] bg-slate-200" />
+                <span className="absolute left-6.75 top-13.5 h-[calc(100%-38px)] w-0.5 bg-slate-200" />
               )}
               <div className="flex items-start gap-4">
                 <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full border border-white bg-white shadow-sm">
