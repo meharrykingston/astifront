@@ -76,6 +76,7 @@ export default function Home() {
 
       if (data?.status === "complete") {
         setQuestionIndex((prev) => prev + 1);
+        const analysis = data?.analysis;
         let location: { lat: number; lng: number } | null = null;
         if (navigator.geolocation) {
           try {
@@ -97,7 +98,7 @@ export default function Home() {
 
         const payload = {
           symptoms: symptomInput || activeSymptom || "Pain",
-          summary: data.summary,
+          analysis,
           location,
         };
 
@@ -124,7 +125,7 @@ export default function Home() {
     <div className={styles.page}>
       <div className={`home-page theme-cycle view-${view}`}>
       <SeoHead
-        title="Astikan Health | Complete Digital Healthcare"
+        title="Astikan"
         description="Online doctor consultation, lab tests, preventive checkups and medicine delivery with Astikan Health."
         canonicalPath="/"
         ogTitle="Astikan Health | Digital Healthcare Platform"
@@ -163,7 +164,7 @@ export default function Home() {
           question={currentQ.q}
           options={currentQ.options || []}
           questionIndex={questionIndex}
-          total={6}
+          total={7}
           onSelect={handleOption}
           onRestart={handleRestart}
         />
