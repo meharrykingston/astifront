@@ -99,9 +99,6 @@ export function SpecialistAndDoctors({ specialist, doctors, userLocation = null 
                   <p>{doc.distance}</p>
                   <p className="font-semibold text-slate-700">{doc.fee}</p>
                 </div>
-                <button className="btn-outline-accent rounded-full border px-4 py-2 text-xs font-semibold transition">
-                  Book appointment
-                </button>
               </div>
             ))}
           </div>

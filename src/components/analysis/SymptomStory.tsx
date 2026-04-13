@@ -14,12 +14,12 @@ type Props = {
 };
 
 const zones: Record<string, { cx: number; cy: number }> = {
-  head: { cx: 50, cy: 22 },
-  chest: { cx: 50, cy: 55 },
-  stomach: { cx: 50, cy: 80 },
-  lower_abdomen: { cx: 50, cy: 100 },
-  left_arm: { cx: 18, cy: 75 },
-  right_leg: { cx: 60, cy: 150 },
+  head: { cx: 100, cy: 52 },
+  chest: { cx: 100, cy: 95 },
+  stomach: { cx: 100, cy: 145 },
+  lower_abdomen: { cx: 100, cy: 178 },
+  left_arm: { cx: 42, cy: 165 },
+  right_leg: { cx: 120, cy: 340 },
 };
 
 const fallbackStory: StoryStep[] = [
@@ -110,25 +110,37 @@ export function SymptomStory({ storyData, onComplete }: Props) {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div className="mx-auto w-full max-w-xs rounded-3xl border border-slate-200 bg-slate-50/80 p-5">
-          <svg viewBox="0 0 100 170" className="h-105 w-full">
+      <div className="mt-4 grid gap-4 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+        <div className="mx-auto w-full max-w-55 rounded-3xl border border-slate-200 bg-slate-50/80 p-2">
+          <svg viewBox="0 0 200 450" className="h-75 w-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="storyBodyFill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stopColor="#f6f9ff" />
-                <stop offset="100%" stopColor="#e0e8f5" />
+              <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#f8fafd" />
+                <stop offset="100%" stopColor="#e2e8f0" />
               </linearGradient>
             </defs>
 
-            <ellipse cx="50" cy="16" rx="10" ry="9" fill="url(#storyBodyFill)" stroke="#bdcce1" strokeWidth="1" />
-            <path
-              d="M50 27c10 0 18 5 22 12l5 14c1.5 3-1 6-4 6h-6v28c0 5 1 10 4 14l7 13c2.5 5 .5 9-4 9h-5c-2.5 0-4.5-1.5-5.5-3.8l-6-15c-1-2.3-1.5-4.8-1.5-7.2v-2.5h-8v2.5c0 2.4-.5 4.9-1.5 7.2l-6 15c-1 2.3-3 3.8-5.5 3.8h-5c-4.5 0-6.5-4-4-9l7-13c3-4 4-9 4-14V59h-6c-3 0-5.5-3-4-6l5-14c4-7 12-12 22-12Z"
-              fill="url(#storyBodyFill)"
-              stroke="#bdcce1"
-              strokeWidth="1"
-            />
-            <path d="M36 57h10M54 57h10" stroke="#c7d4e5" strokeWidth="1.2" strokeLinecap="round" />
-            <path d="M43 76h14M43 95h14" stroke="#c7d4e5" strokeWidth="1" strokeLinecap="round" />
+            <g id="human-body" stroke="#94a3b8" strokeWidth="1" fill="url(#skinGrad)">
+              <path id="head" d="M100 30c-10 0-18 8-18 22s8 22 18 22 18-8 18-22-8-22-18-22z" />
+
+              <g id="chest">
+                <path d="M72 75c-15 2-25 10-28 25 15 0 28 10 56 10s41-10 56-10c-3-15-13-23-28-25H72z" />
+              </g>
+
+              <g id="abs">
+                <path d="M75 110h50c5 20 8 45 0 70-15 10-35 10-50 0-8-25-5-50 0-70z" />
+              </g>
+
+              <g id="arms">
+                <path d="M42 85c-8 15-18 45-12 80 2 15 10 40 10 40s5-5 5-15-5-30-5-60c2-25 12-45 12-45" />
+                <path d="M158 85c8 15 18 45 12 80-2 15-10 40-10 40s-5-5-5-15 5-30 5-60c-2-25-12-45-12-45" />
+              </g>
+
+              <g id="legs">
+                <path d="M75 190c-5 30-15 80-10 130 5 40 15 90 20 95s10-5 10-20-5-70-5-100c0-40 10-105 10-105z" />
+                <path d="M125 190c5 30 15 80 10 130-5 40-15 90-20 95s-10-5-10-20 5-70 5-100c0-40-10-105-10-105z" />
+              </g>
+            </g>
 
             <motion.circle
               cx={zone.cx}

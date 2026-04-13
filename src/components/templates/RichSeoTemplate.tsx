@@ -4,6 +4,8 @@ import type { ComponentType } from "react";
 import { useMemo, useState, useEffect } from "react";
 import { ArrowUpRight, BookOpenCheck, ChevronRight, ClipboardList, FileSearch, Info, Pill, ShieldCheck, Stethoscope, Tag } from "lucide-react";
 import type { SeoPageRecord } from "@/types/seoPage";
+import Image from "next/image";
+
 
 export type SeoTemplateTheme = {
   accentFrom: string;
@@ -128,9 +130,9 @@ export default function RichSeoTemplate({ page, theme }: SeoPageTemplateProps) {
   }, [contentBlocks, headings, page.overview, page.sections]);
 
   const toc = useMemo(() => {
-    const baseToc = [{ id: "overview", title: "Overview" }];
+    const baseToc = [];
     const sectionItems = sections.map((s) => ({ id: s.id, title: s.title }));
-    return [...baseToc, ...sectionItems];
+    return [...sectionItems];
   }, [sections]);
 
   const tags = useMemo(() => page.metaTag.split(",").map((k) => k.trim()).filter(Boolean), [page.metaTag]);
@@ -197,14 +199,24 @@ export default function RichSeoTemplate({ page, theme }: SeoPageTemplateProps) {
         <div className="mx-auto flex max-w-350 items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <button onClick={() => scrollToSection("overview")} className="inline-flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white text-white">
-              <img src="/favicon.png" alt="Astikan" style={{ width: 34, height: 34 }} />
+              <Image
+                // className="brand-icon__image"
+                src="/favicon.png"
+                alt=""
+                width={42}
+                height={42}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
             </span>
-            <span className="text-base font-semibold tracking-tight text-slate-800">Astikan</span>
+            <div className="brand-copy">
+              <h1>Astikan</h1>
+            </div>
           </button>
+
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
             {toc.slice(0, 3).map((item) => (
-              <button key={item.id} onClick={() => scrollToSection(item.id)} className="transition hover:text-slate-900">
+              <button key={item.id} onClick={() => scrollToSection(item.id)} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-grey-400 px-5 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50">
                 {item.title}
               </button>
             ))}
@@ -273,7 +285,7 @@ export default function RichSeoTemplate({ page, theme }: SeoPageTemplateProps) {
         </aside>
 
         <main className="min-w-0 flex-1 space-y-8">
-          <section id="overview" className="scroll-mt-28">
+          {/* <section id="overview" className="scroll-mt-28">
             <div className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg backdrop-blur-xl sm:p-8">
               <h2 className="inline-flex items-center gap-2 text-2xl font-bold text-slate-800">
                 <BookOpenCheck style={medIcon} className="text-slate-600" />
@@ -301,7 +313,7 @@ export default function RichSeoTemplate({ page, theme }: SeoPageTemplateProps) {
                 </div>
               )}
             </div>
-          </section>
+          </section> */}
 
           {sections.map((section) => (
             <section key={section.id} id={section.id} className="scroll-mt-28">

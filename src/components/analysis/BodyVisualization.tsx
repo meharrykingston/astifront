@@ -21,46 +21,40 @@ export function BodyVisualization({ bodyNote, highlightLabel }: Props) {
         <h3 className="text-xl font-semibold text-slate-900">Body visualization</h3>
         <p className="mt-2 text-sm text-slate-600">{bodyNote}</p>
         <div className="mt-6 flex items-center justify-center">
-          <div className="relative h-80 w-52">
-            <svg viewBox="0 0 220 360" className="h-full w-full">
+          <div className="relative h-107.5 w-52">
+            <svg viewBox="0 0 200 450" className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="skinTone" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#f8fbff" />
-                  <stop offset="100%" stopColor="#dfe8f5" />
-                </linearGradient>
-                <linearGradient id="muscleShade" x1="0" x2="1" y1="0" y2="1">
-                  <stop offset="0%" stopColor="#d4dfef" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#edf3fb" stopOpacity="0.25" />
+                <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#f8fafd" />
+                  <stop offset="100%" stopColor="#e2e8f0" />
                 </linearGradient>
               </defs>
-              <ellipse cx="110" cy="30" rx="26" ry="24" fill="url(#skinTone)" stroke="#c8d5e7" strokeWidth="2" />
-              <path
-                d="M110 62c24 0 43 10 53 31l14 36c3 8-2 15-10 15h-15v70c0 12 4 24 10 35l14 25c6 12 2 25-11 25h-12c-7 0-13-4-16-10l-14-34c-3-8-4-16-4-24v-7h-18v7c0 8-1 16-4 24l-14 34c-3 6-9 10-16 10H55c-13 0-17-13-11-25l14-25c6-11 10-23 10-35v-70H53c-8 0-13-7-10-15l14-36c10-21 29-31 53-31Z"
-                fill="url(#skinTone)"
-                stroke="#c4d0e2"
-                strokeWidth="2"
-              />
-              <path d="M84 95c7-8 16-11 26-11s19 3 26 11" stroke="#bcc9dd" strokeWidth="3.5" strokeLinecap="round" />
-              <path d="M94 132c5 5 10 7 16 7s11-2 16-7" stroke="#b7c5d9" strokeWidth="3" strokeLinecap="round" />
-              <path d="M96 156v62M124 156v62" stroke="#cad5e6" strokeWidth="2.5" strokeLinecap="round" />
-              <path
-                d="M83 210c9 8 18 12 27 12s18-4 27-12"
-                fill="none"
-                stroke="#b7c5d9"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-              <ellipse cx="110" cy="186" rx="23" ry="38" fill="url(#muscleShade)" />
-              <path
-                d="M47 139h18M155 139h18"
-                stroke="#c4cfdf"
-                strokeWidth="7"
-                strokeLinecap="round"
-              />
+
+              <g id="human-body" stroke="#94a3b8" strokeWidth="1" fill="url(#skinGrad)">
+                <path id="head" d="M100 30c-10 0-18 8-18 22s8 22 18 22 18-8 18-22-8-22-18-22z" />
+
+                <g id="chest">
+                  <path d="M72 75c-15 2-25 10-28 25 15 0 28 10 56 10s41-10 56-10c-3-15-13-23-28-25H72z" />
+                </g>
+
+                <g id="abs">
+                  <path d="M75 110h50c5 20 8 45 0 70-15 10-35 10-50 0-8-25-5-50 0-70z" />
+                </g>
+
+                <g id="arms">
+                  <path d="M42 85c-8 15-18 45-12 80 2 15 10 40 10 40s5-5 5-15-5-30-5-60c2-25 12-45 12-45" />
+                  <path d="M158 85c8 15 18 45 12 80-2 15-10 40-10 40s-5-5-5-15 5-30 5-60c-2-25-12-45-12-45" />
+                </g>
+
+                <g id="legs">
+                  <path d="M75 190c-5 30-15 80-10 130 5 40 15 90 20 95s10-5 10-20-5-70-5-100c0-40 10-105 10-105z" />
+                  <path d="M125 190c5 30 15 80 10 130-5 40-15 90-20 95s-10-5-10-20 5-70 5-100c0-40-10-105-10-105z" />
+                </g>
+              </g>
             </svg>
-            <div className="absolute left-1/2 top-[56%] h-16 w-16 -translate-x-1/2 rounded-full bg-[#55d2b7]/40 blur-xl" />
-            <div className="absolute left-1/2 top-[56%] h-10 w-10 -translate-x-1/2 rounded-full border border-[#2fb1a7] bg-[#c9f3ea] animate-[pulseGlow_2.8s_ease-in-out_infinite]" />
-            <div className="absolute left-1/2 top-[69%] -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#2b7f74] shadow-sm">
+            <div className="absolute left-1/2 top-[31%] h-16 w-16 -translate-x-1/2 rounded-full bg-[#55d2b7]/40 blur-xl" />
+            <div className="absolute left-1/2 top-[31%] h-10 w-10 -translate-x-1/2 rounded-full border border-[#2fb1a7] bg-[#c9f3ea] animate-[pulseGlow_2.8s_ease-in-out_infinite]" />
+            <div className="absolute left-1/2 top-[41%] -translate-x-1/2 rounded-full bg-white px-3 py-1 text-xs font-semibold text-[#2b7f74] shadow-sm">
               {highlightLabel}
             </div>
           </div>

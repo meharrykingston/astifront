@@ -62,6 +62,11 @@ export const getStaticProps: GetStaticProps<{ page: SeoPageRecord }> = async (co
 export default function DynamicSeoPage({
   page,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+
+  if (!page) {
+    return null; // Or a generic loading/error component
+  }
+
   return (
     <div className={styles.page}>
       <SeoHead

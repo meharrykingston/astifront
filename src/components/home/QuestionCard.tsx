@@ -1,6 +1,7 @@
 ﻿"use client";
 
 type Props = {
+  isLoading?: boolean;
   question: string;
   options: string[];
   questionIndex: number;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function QuestionCard({
+  isLoading,
   question,
   options,
   questionIndex,
@@ -20,37 +22,46 @@ export function QuestionCard({
   return (
     <section className="question-screen" aria-live="polite">
       <div className="question-card">
-        <div className="question-badge">
-          Question {questionIndex + 1} of {total}
-        </div>
-        <h3 className="question-title">{question}</h3>
-        <div className="question-options">
-          {options.map((option) => (
-            <button
-              key={option}
-              className="option-btn"
-              type="button"
-              onClick={() => onSelect(option)}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-        <div className="question-progress">
-          {Array.from({ length: total }).map((_, index) => (
-            <span
-              key={index}
-              className={`progress-dot${index <= questionIndex ? " active" : ""}`}
-            />
-          ))}
-        </div>
-        <div className="mt-5">
-          <button className="option-btn primary" type="button" onClick={onRestart}>
-            Start Over
-          </button>
-        </div>
+        {isLoading ? (
+          <div className="flex min-h-62.5 flex-col items-center justify-center p-6 text-center">
+            <div className="animate-pulse font-bold text-[#2563EB] text-lg">
+              Astikan AI Health Engine analyzing the symptoms........
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="question-badge">
+              Question {questionIndex + 1} of {total}
+            </div>
+            <h3 className="question-title">{question}</h3>
+            <div className="question-options">
+              {options.map((option) => (
+                <button
+                  key={option}
+                  className="option-btn"
+                  type="button"
+                  onClick={() => onSelect(option)}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+            <div className="question-progress">
+              {Array.from({ length: total }).map((_, index) => (
+                <span
+                  key={index}
+                  className={`progress-dot${index <= questionIndex ? " active" : ""}`}
+                />
+              ))}
+            </div>
+            <div className="mt-5">
+              <button className="option-btn primary" type="button" onClick={onRestart}>
+                Start Over
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
 }
-

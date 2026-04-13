@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
@@ -10,10 +11,17 @@ const fadeUp = {
 };
 
 type Props = {
-  onRestart: () => void;
+  onRestart?: () => void;
 };
 
 export function NextSteps({ onRestart }: Props) {
+  const router = useRouter();
+
+  const handleStartOver = () => {
+    onRestart?.();
+    router.push("/");
+  };
+
   return (
     <motion.section
       {...fadeUp}
@@ -39,7 +47,7 @@ export function NextSteps({ onRestart }: Props) {
         </div>
       </div>
       <div className="mt-6">
-        <button className="text-xs font-semibold text-slate-400" type="button" onClick={onRestart}>
+        <button className="text-xs font-semibold text-slate-400" type="button" onClick={handleStartOver}>
           Start over
         </button>
       </div>

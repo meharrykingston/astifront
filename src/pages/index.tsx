@@ -43,12 +43,14 @@ export default function Home() {
     setChatHistory(initialHistory);
     setQuestionIndex(0);
     setIsAnalyzing(true);
+    
+    // View ko turant change karein taki QuestionCard load ho jaye
+    setView("questions");
 
     try {
       const data = await callDiagnoseAPI(initialHistory);
       if (data?.status === "asking" && typeof data.question === "string" && Array.isArray(data.options)) {
         setCurrentQ({ q: data.question, options: data.options });
-        setView("questions");
       }
     } finally {
       setIsAnalyzing(false);
@@ -151,16 +153,10 @@ export default function Home() {
         onStart={startQuestions}
       />
 
-      {isAnalyzing && (
-        <div className="fixed inset-0 left-0 top-0 z-9999 flex h-screen w-screen items-center justify-center bg-white/55 backdrop-blur-[6px]">
-          <div className="animate-pulse font-bold text-[#2563EB]">
-            Astikan AI Health Engine analyzing the symptoms........
-          </div>
-        </div>
-      )}
-
-      {view === "questions" && !isAnalyzing && (
+      {/* Jab view "questions" hoga toh card dikhega. Loading state andar handle hogi. */}
+      {view === "questions" && (
         <QuestionCard
+          isLoading={isAnalyzing}
           question={currentQ.q}
           options={currentQ.options || []}
           questionIndex={questionIndex}
